@@ -1,0 +1,63 @@
+### 1.2.1 修改星球名称，头像，封面 【管理员/超级管理员有权调用，目前icon字段未用上，传参可以不携带此字段】
+PUT {{host}}/api/planets/1/msg HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "icon": "https://openview-oss.oss-cn-chengdu.aliyuncs.com/aed-test/avatar/93.png",
+  "frontCover": "https://openview-oss.oss-cn-chengdu.aliyuncs.com/aed-test/avatar/93.png",
+  "name": "摸鱼猩球1"
+}
+
+### 1.2.2 获取星球下的成员数量
+GET {{host}}/api/planets/1/members-count HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+### 1.2.2 获取星球下的成员
+GET {{host}}/api/planets/1/members?page=1&size=3 HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+### 1.2.3 查询星球基本属性
+GET {{host}}/api/planets/1/msg HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+### 1.2.4 读取用户在星球的信息
+GET {{host}}/api/planets/1/members/me HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+PUT {{host}}/api/planets/1/members/role HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "userIds": [
+    10037
+  ],
+  "role": 0
+}
+
+
+###
+PUT {{host}}/api/planets/1/members/status HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "userIds": [
+    10045
+  ],
+  "status": 0
+}
+

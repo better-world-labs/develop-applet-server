@@ -1,0 +1,23 @@
+### 1.10.1
+GET {{host}}/api/points-goods
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.10.1
+GET {{host}}/api/points-orders/2D4A51AAA3CF49F4B23F532542F3623A/state
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.10.1
+POST {{host}}/api/points-goods/1/points-orders
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.10.1
+GET {{host}}/api/points-orders
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}

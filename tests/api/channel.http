@@ -1,0 +1,177 @@
+### 1.3.1 读取频道组列表
+GET {{host}}/api/channels/groups?planetId=1 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-CSRF-TOKEN: {{csrf}}
+
+### 1.3.2 创建频道组【目前icon字段未用上，传参可以不携带此字段】
+POST {{host}}/api/channels/groups HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "planetId": 1,
+  "name": "交流区",
+  "icon": "https://xxx/xx"
+}
+
+### 1.3.3 删除频道组
+DELETE {{host}}/api/channels/groups/12 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.3.4 修改频道在分组下的顺序
+PUT {{host}}/api/channels/groups/sort HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "groupId": 1,
+  "sortedChannelIds": [
+    6,
+    7,
+    5,
+    3,
+    1,
+    2,
+    9
+  ]
+}
+
+### 1.3.5 读取频道列表
+GET {{host}}/api/channels?planetId=1 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.3.6 根据Id读取多个频道列表
+POST {{host}}/api/channels/query-many HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "ids": [
+    43,45,
+    46,
+    47,
+    49,
+    50,
+    51
+  ]
+}
+
+### 1.3.6 创建频道
+POST {{host}}/api/channels HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "planetId": 1,
+  "name": "公共频道12131",
+  "type": 1,
+  "icon": "https://xxx/xx",
+  "expiresIn": 3600,
+  "groupId": 3,
+  "mute": true
+}
+
+### 1.3.7 删除频道
+DELETE {{host}}/api/channels/63 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+
+### 1.3.8 读取频道成员
+GET {{host}}/api/channels/75/members HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.3.9 申请加入频道
+POST {{host}}/api/channels/93/apply HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "reason": "xxx"
+}
+
+### 1.3.10 退出频道【暂未实现】
+POST {{host}}/api/channels/1/unsubscribe HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.3.12 获取当前用户在频道下的最后读取消息id
+GET {{host}}/api/channels/41/last-read HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.3.13 修改分组名
+PUT {{host}}/api/channels/groups/group-name HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "planetId": 1,
+  "channelGroupId": 37,
+  "name": "生活"
+}
+
+### 1.3.14 修改频道名称
+PUT {{host}}/api/channels/channel-name HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "planetId": 1,
+  "channelId": 41,
+  "name": "吃饭"
+}
+
+### 1.3.15 获取所有频道下用户消息未读数量
+GET {{host}}/api/channels/unread-msg-num?planetId=1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+### 管理移除用户
+DELETE {{host}}/api/channels/64/users/10045 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+
+### 读取某个频道
+GET {{host}}/api/channels/43 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+### 1.3.10 读取我在某个频道的授权状态
+GET {{host}}/api/channels/64/member-state HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+
+###
+PUT {{host}}/api/channels/43/notice HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "notice": "频道公告"
+}
+

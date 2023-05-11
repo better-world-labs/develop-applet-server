@@ -1,0 +1,29 @@
+### 1.1.1 获取扫码登录的二维码【PC端调用】
+GET {{host}}/api/users/login/qr
+
+
+### 1.1.2 使用`loginToken`完成登录【PC端调用】
+POST {{host}}/api/users/login
+Content-Type: application/json;charset=utf8
+
+{
+  "loginToken": "eyJpIjoxMDA2MSwiZSI6IjIwMjMtMDQtMjZUMTU6MDg6NDkuNjgzMTk0MTMyKzA4OjAwIn0.v007Cb-cLHA",
+  "invitedBy": 10036,
+  "fromApp": "mini-app"
+}
+
+### 1.1.3 获取鉴权跳转参数【Mobile端调用】
+GET {{host}}/api/users/login/auth-params?qrToken=eyJpIjpudWxsLCJlIjoiMjAyMy0wNC0yMFQxMjowNToxOS4xOTgzNzY2NTMrMDg6MDAifQ.MLdYh_CynQU&redirectUrl=https%253A%252F%252Fmoyu.test.openviewtech.com%252Fapi%252Foauth%252Fcallback-wechat
+
+
+### 1.1.4 移动端提交登录code【Mobile端调用】
+POST {{host}}/api/users/login/code
+Content-Type: application/json;charset=utf8
+
+{
+  "qrToken": "zvPmnjmUEe2oMI7pVFms9A",
+  "code": "031GmE100YBuBO1iXd100GO5fH0GmE1k"
+}
+
+### 测试登录
+GET {{host}}/api/users/login/test

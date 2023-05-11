@@ -1,0 +1,50 @@
+### 1.9.1 批量读取 IM 消息
+POST {{host}}/api/messages/get
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "ids": [
+    1399,
+    1400,
+    1401,
+    2196,
+    1402
+  ]
+}
+
+### 1.9.2 读取历史IM消息
+POST {{host}}/api/messages/history
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "channelId": 42,
+  "size": 100,
+  "fromId": 3089,
+  "upFlag": false
+}
+
+###
+POST {{host}}/api/messages/7785/like
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "isLike": false
+}
+
+###
+POST {{host}}/api/messages/like
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-Csrf-Token: {{csrf}}
+
+{
+  "ids": [7785]
+}
+
+

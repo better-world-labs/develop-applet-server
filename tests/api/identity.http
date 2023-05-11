@@ -1,0 +1,2 @@
+### 1.1.1 获取扫码登录的二维码【PC端调用】
+GET {{host}}/api/anonymous-identities

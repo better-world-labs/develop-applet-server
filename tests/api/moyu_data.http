@@ -1,0 +1,27 @@
+### 1.11.1 上报摸鱼时长
+POST {{host}}/api/users/me/browse-duration
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "timeQuantum":[
+    {
+      "startTime": "2022-11-14T07:40:16.787Z",
+      "endTime": "2022-11-14T07:52:16.787Z"
+    }
+  ]
+}
+
+### 1.11.2 获取摸鱼数据详情
+GET {{host}}/api/users/moyu-detail?userId=10048
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+
+#### 1.11.3 获取摸鱼时长排行榜？type: 0/默认 -> total  1 -> daily
+GET {{host}}/api/users/moyu-time-ranking?top=5&period=1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}

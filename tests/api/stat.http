@@ -1,0 +1,6 @@
+### 1.11.5 热门聊天榜(按频道)
+
+GET {{host}}/api/stat/hot-messages?top=5&channel=42
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}

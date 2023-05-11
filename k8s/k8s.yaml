@@ -1,0 +1,142 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __APP_NAME__
+  namespace: __NS__
+
+spec:
+  replicas: __POD_COUNT__
+  minReadySeconds: 10 #容器稳定运行10s才算成功启动
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: __APP_NAME__
+  template:
+    metadata:
+      labels:
+        app: __APP_NAME__
+
+    spec:
+      imagePullSecrets:
+        - name: docker-reg-secret
+
+      volumes:
+        - name: config
+          configMap:
+            name: moyu-server-conf
+
+      containers:
+        - name: __APP_NAME__
+          image: __APP_IMAGE__
+          ports:
+            - containerPort: 8080
+              name: web
+
+          volumeMounts:
+            - name: config
+              mountPath: "/app/config"
+              readOnly: true
+
+          env:
+            #日志输出的相关定义#
+            - name: aliyun_logs___NS__
+              value: stdout
+            - name: aliyun_logs___NS___project
+              value: openviewtech-logs
+
+          startupProbe:
+            httpGet:
+              scheme: HTTP             # 协议
+              path: /api/health-check?is_start      # 路径
+              port: 8080               # 端口
+            initialDelaySeconds: 10
+            periodSeconds: 2          # 执行探测频率(秒) 【 每隔秒执行一次 】
+            timeoutSeconds: 10         # 超时时间
+            successThreshold: 1        # 健康阀值
+            failureThreshold: 60       # 不健康阀值
+
+          #就绪检查
+          readinessProbe:
+            httpGet:
+              scheme: HTTP             # 协议
+              path: /api/health-check?is_ready      # 路径
+              port: 8080               # 端口
+            initialDelaySeconds: 10    # 延迟探测时间(秒)【 在k8s第一次探测前等待秒 】
+            periodSeconds: 20          # 执行探测频率(秒) 【 每隔秒执行一次 】
+            timeoutSeconds: 3          # 超时时间
+            successThreshold: 1        # 健康阀值
+            failureThreshold: 60        # 不健康阀值
+
+          #存活检查
+          livenessProbe:
+            httpGet:
+              scheme: HTTP             # 协议
+              path: /api/health-check?is_alive      # 路径
+              port: 8080               # 端口
+            initialDelaySeconds: 60    # 延迟探测时间(秒) 【 在k8s第一次探测前等待秒 】
+            periodSeconds: 30          # 执行探测频率(秒) 【 每隔秒执行一次 】
+            timeoutSeconds: 5          # 超时时间
+            successThreshold: 1        # 健康阀值
+            failureThreshold: 5        # 不健康阀值
+
+          #CPU内存限制
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 800Mi
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: __APP_NAME__
+  namespace: __NS__
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: __APP_NAME__
+  type: ClusterIP
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: __APP_NAME__
+  namespace: __NS__
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: __HOST__
+      http:
+        paths:
+          - path: /api
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: __APP_NAME__
+                port:
+                  number: 80
+    - host: __AI_HOST__
+      http:
+        paths:
+          - path: /api
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: __APP_NAME__
+                port:
+                  number: 80

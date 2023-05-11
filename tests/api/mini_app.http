@@ -1,0 +1,272 @@
+###
+GET {{host}}/api/apps?category=0 HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/apps/mine?category=1 HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/apps/1113
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+PUT {{host}}/api/apps/111315dfdfddffddfagfdfdaf
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "name": "模板名称11211",
+  "duplicateFrom": "558a47a7-932e-4a04-a181-8909f7f3857e",
+  "category": 1,
+  "description": "模板描述",
+  "form": [
+    {
+      "id": "uuid1",
+      "label": "姓名",
+      "type": "text",
+      "properties": {
+        "placeholder": "xxx"
+      }
+    },
+    {
+      "id": "uuid2",
+      "label": "性别",
+      "type": "text",
+      "properties": {
+        "placeholder": "xxx"
+      }
+    }
+  ],
+  "flow": [
+    {
+      "id": "uuid1",
+      "type": "chatgpt",
+      "outputVisible": false,
+      "prompt": [
+        {
+          "type": "text",
+          "properties": {
+            "value": "从 ("
+          }
+        },
+        {
+          "type": "tag",
+          "properties": {
+            "from": "form",
+            "character": "uuid1"
+          }
+        },
+        {
+          "type": "text",
+          "properties": {
+            "value": ","
+          }
+        },
+        {
+          "type": "tag",
+          "properties": {
+            "from": "form",
+            "character": "uuid2"
+          }
+        },
+        {
+          "type": "text",
+          "properties": {
+            "value": ")中选一项输出"
+          }
+        }
+      ],
+      "createdBy": {
+        "id": 12,
+        "name": "xxxx",
+        "avatar": "http://xxx/xxx"
+      },
+      "createdAt": "2023-03-22T07:08:02.851Z",
+      "updatedAt": "2023-03-22T07:08:02.851Z",
+      "status": 0
+    },
+    {
+      "id": "uuid2",
+      "type": "chatgpt",
+      "outputVisible": true,
+      "prompt": [
+        {
+          "type": "text",
+          "properties": {
+            "value": "用"
+          }
+        },
+        {
+          "type": "tag",
+          "properties": {
+            "from": "result",
+            "character": "uuid1"
+          }
+        },
+        {
+          "type": "text",
+          "properties": {
+            "value": "造个句子"
+          }
+        }
+      ],
+      "createdBy": {
+        "id": 12,
+        "name": "xxxx",
+        "avatar": "http://xxx/xxx"
+      },
+      "createdAt": "2023-03-22T07:08:02.851Z",
+      "updatedAt": "2023-03-22T07:08:02.851Z",
+      "status": 0
+    }
+  ]
+}
+
+###
+DELETE {{host}}/api/apps/1111 HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+### run
+POST {{host}}/api/apps/3a2ffd1b-090b-435b-8e9a-73d77009f0e1/run HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "values": [
+    "罗胜"
+  ],
+  "open": true
+}
+
+###
+GET {{host}}/api/apps/1112/outputs HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/app-categories HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/app-tabs HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+
+###
+GET {{host}}/api/ai-models HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/apps/1112/like HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+POST {{host}}/api/outputs/123/like HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "like": 1
+}
+
+###
+GET {{host}}/api/outputs/likes?outputIds=132,133,134 HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+POST {{host}}/api/apps/1112/like HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "like": true
+}
+
+###
+POST {{host}}/api/apps/1112/comments HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "content": "hahaha"
+}
+
+###
+GET {{host}}/api/apps/1112/comments HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+POST {{host}}/api/events HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "type": "app-viewed",
+  "args": [
+    "95e047ec-7daf-4af8-99b5-f25913d710c0"
+  ]
+}
+
+###
+GET {{host}}/api/users/me/guidance HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+POST {{host}}/api/users/me/guidance/completion HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/apps/collected HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+POST {{host}}/api/apps/95e047ec-7daf-4af8-99b5-f25913d710c0/collect HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "collected": true
+}
+
+###
+POST {{host}}/api/apps/is-collected HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+  "uuids": ["95e047ec-7daf-4af8-99b5-f25913d710c0","1","2"]
+}

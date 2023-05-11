@@ -1,0 +1,49 @@
+### 1.6.1 获取 OSS Token
+
+GET {{host}}/api/system/oss-token
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+### 1.6.3 获取摸鱼表情
+GET {{host}}/api/system/emoticons
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+GET {{host}}/api/system-configs?key=MINI_APP_HOME_TABS
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+###
+PUT {{host}}/inner/system-configs
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
+
+{
+    "key": "MINI_APP_HOME_TABS",
+    "value": {
+        "tabs": [
+            {
+                "label": "热门",
+                "category": 0,
+                "order": 0
+            },
+            {
+                "label": "生活",
+                "category": 1,
+                "order": 1
+            },
+            {
+                "label": "文学",
+                "category": 2,
+                "order": 2
+            },
+            {
+                "label": "办公神器",
+                "category": 3,
+                "order": 3
+            }
+        ]
+    }
+}
+

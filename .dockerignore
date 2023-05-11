@@ -1,0 +1,8 @@
+docs
+scripts
+/Dockerfile
+*.md
+/bin
+/.*
+/k8s
+/tests

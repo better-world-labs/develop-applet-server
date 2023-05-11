@@ -1,0 +1,12 @@
+### 1.9.1 批量读取 IM 消息
+POST {{host}}/api/robots/messages
+Content-Type: application/json;charset=utf8
+App-Id: 11111112
+Channel-Id: 41
+
+{
+  "reference": 8215,
+  "type": "text",
+  "text": "<a href=\"https://search.jd.com/Search?keyword=%E7%BA%A2%E8%89%B2+%E9%A2%84%E7%AE%97+%E6%94%B6%E5%88%B0\"> 购买链接 </a>",
+  "duration": 3
+}

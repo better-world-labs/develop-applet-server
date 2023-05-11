@@ -1,0 +1,15 @@
+### 1.11.1 读取某个审批单
+GET {{host}}/api/approvals/1 HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-CSRF-TOKEN: {{csrf}}
+
+### 1.11.2 审批
+POST {{host}}/api/approvals/45/audit HTTP/1.1
+Cookie: {{cookie}}
+Content-Type: application/json;charset=utf8
+X-CSRF-TOKEN: {{csrf}}
+
+{
+  "pass": true
+}
