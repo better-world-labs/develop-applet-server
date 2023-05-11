@@ -1,4 +1,13 @@
-## 当前版本: v1.3
+## 当前版本: v1.4
+### 修改记录
+
+- 1.2.1 读取应用列表,1.2.2 读取我创建的应用, 1.2.3 读取我收藏的应用, 1.2.6 读取某个应用 增加 `hot` 字段
+- 1.2.10 读取某个应用的运行结果 增加 `nextCursor` 返回以支持分页
+- 新增接口 1.2.11 读取某个运行结果
+- 新增接口 1.3.6 批量读取我对应用的点赞状态
+- 新增文档 1.9 用户
+- 新增接口 1.9.3 读取用户个人统计
+- [用户上报事件](#user-event-definition)增加事件类型 热度标记
 
 [[_TOC_]]
 
@@ -169,11 +178,12 @@ X-Request-ID: {id}
            ],
            "createdBy": {
              "id": 12,
-             "name": "xxxx",
+             "nickname": "xxxx",
              "avatar": "http://xxx/xxx"
            },
            "runTimes": 12,
            "useTimes": 11,
+           "hot": 2345,
            "commentTimes": 10,
            "likeTimes": 2,
            "createdAt": "2023-03-22T07:08:02.851Z",
@@ -233,10 +243,11 @@ X-Request-ID: {id}
           "updatedAt": "2023-03-22T07:08:02.851Z",
           "createdBy": {
             "id": 12,
-            "name": "xxxx",
+            "nickname": "xxxx",
             "avatar": "http://xxx/xxx"
           },
           "runTimes": 12,
+          "hot": 2345,
           "useTimes": 11,
           "commentTimes": 10,
           "likeTimes": 2,
@@ -289,11 +300,70 @@ X-Request-ID: {id}
           "updatedAt": "2023-03-22T07:08:02.851Z",
           "createdBy": {
             "id": 12,
-            "name": "xxxx",
+            "nickname": "xxxx",
             "avatar": "http://xxx/xxx"
           },
           "runTimes": 12,
           "useTimes": 11,
+          "hot": 2345,
+          "commentTimes": 10,
+          "likeTimes": 2,
+          "status": 0 // 生命周期 (0.未发布 1.已发布)
+        }
+      ]
+    }
+  };
+  ```
+
+#### 1.2.4 读取某用户的应用
+
+按照创建时间倒序
+
+- 请求
+
+  ```http
+  GET /api/users/:userId/apps HTTP/1.1
+  ```
+
+- 应答
+
+  ```js
+  // HTTP/1.1 200 OK
+  
+  res = {
+    "code": 0,
+    "data": {
+      "nextCursor": "xxx",
+      "list": [
+        {
+          "id": 1,
+          "uuid": "uuid",
+          "name": "模板名称",
+          "price": 5, //花费积分
+          "soldPoints": 100,
+          "description": "模板描述",
+          "results": [
+            {
+              "id": 1,
+              "type": "text",
+              "content": "xxxxxxxxxxxxxxxxxxx"
+            },
+            {
+              "id": 1,
+              "type": "text",
+              "content": "xxxxxxxxxxxxxxxxxxx"
+            }
+          ],
+          "createdAt": "2023-03-22T07:08:02.851Z",
+          "updatedAt": "2023-03-22T07:08:02.851Z",
+          "createdBy": {
+            "id": 12,
+            "nickname": "xxxx",
+            "avatar": "http://xxx/xxx"
+          },
+          "runTimes": 12,
+          "useTimes": 11,
+          "hot": 2345,
           "commentTimes": 10,
           "likeTimes": 2,
           "status": 0 // 生命周期 (0.未发布 1.已发布)
@@ -443,13 +513,14 @@ X-Request-ID: {id}
       ],
       "createdBy": {
           "id": 12,
-          "name": "xxxx",
+          "nickname": "xxxx",
           "avatar": "http://xxx/xxx"
       },
       "runTimes": 12,
       "useTimes": 11,
       "commentTimes": 10,
       "likeTimes": 2,
+      "hot": 2345,
       "createdAt": "2023-03-22T07:08:02.851Z",
       "updatedAt": "2023-03-22T07:08:02.851Z",
       "status": 0 // 生命周期 (0.未发布 1.已发布)
@@ -520,7 +591,7 @@ X-Request-ID: {id}
     ],
     "createdBy": {
       "id": 12,
-      "name": "xxxx",
+      "nickname": "xxxx",
       "avatar": "http://xxx/xxx"
     },
     "createdAt": "2023-03-22T07:08:02.851Z",
@@ -599,7 +670,7 @@ X-Request-ID: {id}
       ],
       "createdBy": {
         "id": 12,
-        "name": "xxxx",
+        "nickname": "xxxx",
         "avatar": "http://xxx/xxx"
       },
       "runTimes": 12,
@@ -706,7 +777,7 @@ X-Request-ID: {id}
 
 #### 1.2.10 读取某个应用的运行结果
 
-按照热度排序
+按照最新排序分页返回，一页50条记录
 
 - 请求
 
@@ -727,6 +798,7 @@ X-Request-ID: {id}
   resp = {
     "code": 0,
     "data": {
+      "nextCursor": "xxxxx",
       "list": [
         {
           "id": "1", 
@@ -739,7 +811,7 @@ X-Request-ID: {id}
           "createdAt": "xxxx",
           "createdBy": {
               "id": 12,
-              "name": "xxxx",
+              "nickname": "xxxx",
               "avatar": "http://xxx/xxx"
           }
         }
@@ -748,7 +820,44 @@ X-Request-ID: {id}
   }
   ```
 
-#### 1.2.11 读取AI模型列表
+#### 1.2.11 读取某个运行结果
+
+- 请求
+
+  ```http
+  GET /api/outputs/:outputId HTTP/1.1
+  ```
+
+- 其中
+
+  | 字段   | 说明   |
+    |------| --- |
+  | outputId    | 运行结果ID |
+
+- 应答
+
+  ```js
+  // HTTP/1.1 200 OK
+  resp = {
+    "code": 0,
+    "data": {
+      "id": "1", 
+      "type": "text",
+      "inputArgs":["xxx","xxx"],
+      "content": "哈哈哈",
+      "likeTimes": 12, //点赞数
+      "hateTimes": 12, //踩数
+      "commentTimes": 12, //评论数
+      "createdAt": "xxxx",
+      "createdBy": {
+          "id": 12,
+          "nickname": "xxxx",
+          "avatar": "http://xxx/xxx"
+      }
+    }
+  }
+  ```
+#### 1.2.12 读取AI模型列表
 
 按照热度排序
 
@@ -783,7 +892,7 @@ X-Request-ID: {id}
   }
   ```
 
-#### 1.2.12 读取 App 分类
+#### 1.2.13 读取 App 分类
 
 - 请求
 
@@ -812,7 +921,7 @@ X-Request-ID: {id}
   }
   ```
 
-#### 1.2.13 读取首页 Tab
+#### 1.2.14 读取首页 Tab
 
 - 请求
 
@@ -852,7 +961,7 @@ X-Request-ID: {id}
   }
    ```
 
-#### 1.2.14 事件上报
+#### 1.2.15 事件上报
 
 前端上报事件
 
@@ -997,7 +1106,39 @@ X-Request-ID: {id}
   }
    ```
 
-#### 1.3.6 读取应用的评论列表
+#### 1.3.6 批量读取我对应用的点赞状态
+
+- 请求
+
+  ```http
+  POST /api/apps/:id/get-likes HTTP/1.1
+  
+  {
+    "appIds": ["xxx"]
+  }
+  ```
+
+- 其中
+
+  | 字段 | 说明 |
+    | --- | --- |
+  | like | 点赞/取消点赞 |
+
+- 应答
+
+  ```js
+  resp = {
+    "code": 0,
+    "data": {
+      "app1": true,
+      "app2": true,
+      "app3": false,
+    }
+  }
+   ```
+  ***输入参数均会出现在应答中***
+
+#### 1.3.7 读取应用的评论列表
 
 - 请求
 
@@ -1018,7 +1159,7 @@ X-Request-ID: {id}
           "createdAt": "2023-03-22T07:08:02.851Z",
           "createdBy": {
               "id": 12,
-              "name": "xxxx",
+              "nickname": "xxxx",
               "avatar": "http://xxx/xxx"
           }
         }
@@ -1027,7 +1168,7 @@ X-Request-ID: {id}
   }
    ```
 
-#### 1.3.6 读取我对应用输出的点赞状态
+#### 1.3.8 读取我对应用输出的点赞状态
 
 - 请求
 
@@ -1060,7 +1201,7 @@ X-Request-ID: {id}
   }
    ```
 
-#### 1.3.8 读取应用输出的评论列表 (暂不实现)
+#### 1.3.9 读取应用输出的评论列表 (暂不实现)
 
 - 请求
 
@@ -1081,7 +1222,7 @@ X-Request-ID: {id}
           "createdAt": "2023-03-22T07:08:02.851Z",
           "createdBy": {
             "id": 12,
-            "name": "xxxx",
+            "nickname": "xxxx",
             "avatar": "http://xxx/xxx"
           }
         }
@@ -1470,7 +1611,7 @@ X-Request-ID: {id}
   // HTTP/1.1 200 OK
   
   res = {
-    "code": 0
+    "code": 0,
     "data": {
       "count": 12
     }
@@ -1608,6 +1749,86 @@ X-Request-ID: {id}
   };
   ```
 
+### 1.9 用户
+
+#### 1.9.1 获取用户个人信息
+
+复制自摸鱼
+
+- 请求
+
+  ```http
+  GET /api/users/me/info HTTP/1.1
+  ```
+
+- 应答
+
+  ```js
+  //HTTP/1.1 200 OK
+  {
+    "code": 0,
+    "data": {
+      "id": 0,
+      "nickname": "哈哈哈哈哈",
+      "avatar": "https://openview-oss.oss-cn-chengdu.aliyuncs.com/aed-test/avatar/93.png",
+      "lastLoginAt": "xxxxx" //为空表示首次登录
+      "invitedBy": 23, //为空表示自然流量
+      "points": 80
+    }
+  }
+  ```
+
+#### 1.9.2 修改个人资料信息
+
+复制自摸鱼
+
+昵称长度：八个汉字
+
+- 请求
+
+  ```http
+  PUT /api/users/me/info HTTP/1.1
+  
+  {
+    nickname: "xxxx",
+    avatar:"https://sxxx"
+  }
+  ```
+
+- 应答
+
+  ```js
+  //HTTP/1.1 200 OK
+  resp = {
+      "code": 0
+  }
+  ```
+
+#### 1.9.3 读取用户个人统计
+
+- 请求
+
+  ```http
+  GET /api/users/:userId/statistic HTTP/1.1
+  ```
+
+- 应答
+
+  ```js
+  //HTTP/1.1 200 OK
+  resp = {
+      "code": 0,
+      "data": {
+        "apps": 390,
+        "registeredDays": 30,
+        "points": 30,
+        "appUses": 30999,
+        "appLikes": 30999,
+      }
+  }
+  ```
+
+
 ### 1.10 服务端推送
 
 通知接收类的服务端消息推送，采用 `Websocket` 的方式实现
@@ -1656,6 +1877,21 @@ wss://ai.moyu.dev.openviewtech.com/push/endpoint?scrf=
   ```json
   {
     "type": "app-viewed",
+    "args": ["uuid"]
+  }
+  ``` 
+
+- 其中
+
+  | 字段     |类型 | 说明   |
+  | -------|------| --- |
+  | args[0] | 字符串 | App uuid| 
+
+#### (2) 热度标记
+
+  ```json
+  {
+    "type": "app-hot-mark",
     "args": ["uuid"]
   }
   ``` 
