@@ -111,7 +111,7 @@ X-Request-ID: {id}
       // X-Request-ID: 123
       
       httpRes = {
-        "msg": "ok",
+        "code": 0,
         "data": {
             //...
         }
