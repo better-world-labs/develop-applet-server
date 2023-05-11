@@ -5,7 +5,7 @@ RUN sed 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' -i /etc/apk/repositories
     apk add make git
 
 ENV GO111MODULE=on \
-    GOPROXY=https://goproxy.cn,direct \
+    GOPROXY=https://goproxy.cn,direct
 
 COPY ["go.mod", "go.sum", "Makefile", "./"]
 
