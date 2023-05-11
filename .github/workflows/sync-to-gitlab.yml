@@ -1,0 +1,23 @@
+name: sync to gitlab
+on: [push, create, delete]
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Private Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SYNC }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+      - name: Push Mirror
+        env:
+          DESTINATION_REPO: 'ssh://git@gitlab.openviewtech.com:10022/moyu-chat/develop-applet-server.git'
+        run: |
+          git clone https://github.com/better-world-labs/develop-applet-server.git
+          cd develop-applet-server
+          git checkout "${GITHUB_REF_NAME}"
+          git remote set-url --push origin "$DESTINATION_REPO"
+          git push origin "${GITHUB_REF_NAME}"
