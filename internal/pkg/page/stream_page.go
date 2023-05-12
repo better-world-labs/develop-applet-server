@@ -25,7 +25,7 @@ func CreateStreamQuery(size int, cursor string) StreamQuery {
 	}
 }
 
-func (q StreamQuery) CursorData() int64 {
+func (q StreamQuery) CursorIndicator() int64 {
 	return unwrapCursor(q.nextCursor)
 }
 
@@ -79,6 +79,14 @@ func unwrapCursor(cursor string) int64 {
 	data, _ := base64.URLEncoding.DecodeString(cursor)
 	cursorData, _ := strconv.ParseInt(string(data), 10, 64)
 	return cursorData
+}
+
+func (q StreamResult[T]) GetList() []T {
+	return q.list
+}
+
+func (q StreamResult[T]) GetNextCursor() string {
+	return q.nextCursor
 }
 
 func (q StreamResult[T]) MarshalJSON() ([]byte, error) {

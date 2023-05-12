@@ -11,6 +11,7 @@ import (
 	businesserrors "gitlab.openviewtech.com/moyu-chat/moyu-server/internal/error"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/utils"
 	"time"
 )
@@ -309,6 +310,25 @@ func (a appSvc) runApp(userId int64, app *entity.MiniApp, param entity.MiniAppRu
 
 func (a appSvc) CreateOutput(output *entity.MiniAppOutput) error {
 	return a.pMiniApp.createOutput(output)
+}
+
+func (a appSvc) PageOpenedAppOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutputDto], int64, error) {
+	outputs, err := a.pMiniApp.pageOpenedOutputsByAppId(query, uuid)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	count, err := a.pMiniApp.countOutputsByAppId(uuid)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	dto, err := a.transMiniAppOutputToDto(outputs.GetList())
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return page.NewStreamResult(dto), count, err
 }
 
 func (a appSvc) ListOpenedAppOutputsByAppId(uuid string) ([]*entity.MiniAppOutputDto, error) {

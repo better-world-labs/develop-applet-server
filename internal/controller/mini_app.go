@@ -8,6 +8,7 @@ import (
 	"github.com/gone-io/gone/goner/logrus"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/utils"
 	"io"
 	"net/http"
@@ -212,13 +213,20 @@ func (con *miniAppController) runApp(ctx *gin.Context) (any, error) {
 
 func (con *miniAppController) getAppOutputs(ctx *gin.Context) (any, error) {
 	uuid := ctx.Param("uuid")
-	outputs, err := con.svc.ListOpenedAppOutputsByAppId(uuid)
+	var query page.StreamQuery
+	if err := query.BindQuery(ctx); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	outputs, total, err := con.svc.PageOpenedAppOutputsByAppId(query, uuid)
 	if err != nil {
 		return nil, err
 	}
 
-	return entity.ListWrap{
-		List: outputs,
+	return map[string]any{
+		"total":      total,
+		"list":       outputs.GetList(),
+		"nextCursor": outputs.GetNextCursor(),
 	}, nil
 }
 

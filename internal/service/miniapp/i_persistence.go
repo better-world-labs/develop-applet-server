@@ -1,6 +1,9 @@
 package miniapp
 
-import "gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
+import (
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
+)
 
 type iAIModel interface {
 	list() ([]*entity.MiniAppAiModel, error)
@@ -33,4 +36,6 @@ type iAppPersistence interface {
 	checkOutputExistsByAppIdAndUser(appId string, userId int64) (bool, error)
 	countAppByUserId(userId int64) (int64, error)
 	countOutputsAppIdByUserId(userId int64) (int64, error)
+	countOutputsByAppId(appId string) (int64, error)
+	pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutput], error)
 }

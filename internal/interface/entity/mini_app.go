@@ -135,6 +135,14 @@ func (a *MiniAppBaseInfo) IsDuplicated() bool {
 	return a.DuplicateFrom != ""
 }
 
+func (a *MiniAppBaseInfo) Cursor() int64 {
+	return a.Id
+}
+
+func (a *MiniAppOutput) Cursor() int64 {
+	return a.Id
+}
+
 func (a *MiniApp) Input(args []string) error {
 	if len(*a.Form) != len(args) {
 		return errors.New("invalid args")

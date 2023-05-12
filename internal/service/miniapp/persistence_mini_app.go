@@ -5,6 +5,7 @@ import (
 	"github.com/gone-io/gone/goner/xorm"
 	"gitlab.openviewtech.com/gone/gone-lib/collection"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"time"
 )
 
@@ -138,7 +139,26 @@ func (p pMiniApp) countAppByUserId(userId int64) (int64, error) {
 	return p.Table(entity.MiniApp{}).Where("created_by = ?", userId).Count()
 }
 
+func (p pMiniApp) countOutputsByAppId(appId string) (int64, error) {
+	return p.Table(entity.MiniAppOutput{}).Where("app_id = ?", appId).Count()
+}
+
 func (p pMiniApp) countOutputsAppIdByUserId(userId int64) (int64, error) {
 	return p.Table(entity.MiniAppOutput{}).
 		Where("created_by = ?", userId).Distinct("app_id").Count()
+}
+
+func (p pMiniApp) pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutput], error) {
+	var arr []*entity.MiniAppOutput
+
+	session := p.Where("app_id = ? and open = 1", uuid)
+	if query.CursorIndicator() > 0 {
+		session.Where("id < ?", query.CursorIndicator())
+	}
+
+	if err := session.Desc("id").Limit(query.Size(), 0).Find(&arr); err != nil {
+		return nil, err
+	}
+
+	return page.NewStreamResult(arr), nil
 }

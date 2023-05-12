@@ -2,6 +2,7 @@ package service
 
 import (
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"io"
 )
 
@@ -44,6 +45,8 @@ type (
 		CreateOutput(output *entity.MiniAppOutput) error
 
 		RunApp(userId int64, uuid string, param entity.MiniAppRunParam) (*ChannelStreamTrunkReader[*entity.MiniAppOutputStreamChunk], error)
+
+		PageOpenedAppOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutputDto], int64, error)
 
 		ListOpenedAppOutputsByAppId(uuid string) ([]*entity.MiniAppOutputDto, error)
 

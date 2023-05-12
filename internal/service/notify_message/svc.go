@@ -74,8 +74,8 @@ func (s svc) PageNotifyMessages(userId int64, query page.StreamQuery, filter ent
 
 	session := s.Where("user_id = ?", userId)
 
-	if query.CursorData() > 0 {
-		session = session.Where("id < ?", query.CursorData())
+	if query.CursorIndicator() > 0 {
+		session = session.Where("id < ?", query.CursorIndicator())
 	}
 
 	if filter.IsRead != nil {

@@ -785,14 +785,15 @@ X-Request-ID: {id}
 - 请求
 
   ```http
-  GET /api/apps/:uuid/outputs HTTP/1.1
+  GET /api/apps/:uuid/outputs?cursor=xxx HTTP/1.1
   ```
 
 - 其中
 
   | 字段   | 说明   |
-    |------| --- |
-  | uuid    | 应用ID |
+  |------| --- |
+  | uuid | 应用ID |
+  | cursor    |分页游标，来源于上一页的 data 数据, 不填返首页数据  |
 
 - 应答
 
