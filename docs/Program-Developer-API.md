@@ -11,6 +11,7 @@
 - 新增接口 1.2.4 读取某用户的应用
 - 新增接口 1.3.10 批量读取我对应用的推荐状态
 - 新增接口 1.3.11 对应用进行推荐/取消推荐
+- 新增接口文档 1.11 系统配置，对各种 key 进行描述,增加运营位相关 key
 
 [[_TOC_]]
 
@@ -793,7 +794,7 @@ X-Request-ID: {id}
   | 字段   | 说明   |
   |------| --- |
   | uuid | 应用ID |
-  | cursor    |分页游标，来源于上一页的 data 数据, 不填返首页数据  |
+  | cursor    | 分页游标 |
 
 - 应答
 
@@ -1966,11 +1967,85 @@ wss://ai.moyu.dev.openviewtech.com/push/endpoint?scrf=
   | -------|------| --- |
   | args[0] | 字符串 | App uuid| 
 
+### 1.11 系统配置
+
+#### 1.11.1 读取某个键值对
+
+- 请求
+
+  ```http
+  GET /api/system-configs?key=xxx HTTP/1.1
+  ```
+
+- 应答
+
+  ```js
+  // HTTP/1.1 200 OK
+  
+  res = {
+    code: 0,
+    data: {
+      value: xxx
+    },
+  };
+  ```
+
+- 其中
+
+  | 字段   | 说明   |
+  |------| --- |
+  | value    | 值，可以是任何数据类型 |
+
+根据不同的 `key`，存在以下对应的 `value`
+
+- MINI_APP_AD_PLACEHOLDER_HOME
+ 
+  首页运营位
+ 
+  ```json
+  {
+    "thumbnail": "https:///xxx/xxx",
+    "target": {
+      "url": "https://xxx/xxx",
+      "type": "image"
+    }
+  } 
+  ```
+- 其中
+ 
+  | 字段         | 说明    |
+  |-------| --- |
+  | thumbnail  | 图片内容  | 
+  | target.url | 目标URL | 
+  | target.type   | 目标类型 (image: 图片, link: 链接) | 
+
+- MINI_APP_AD_PLACEHOLDER_OUTPUT
+
+  应用输出详情运营位
+
+  ```json
+  {
+    "thumbnail": "https:///xxx/xxx",
+    "target": {
+      "url": "https://xxx/xxx",
+      "type": "image"
+    }
+  } 
+  ```
+- 其中
+
+  | 字段         | 说明    |
+  |-------| --- |
+  | thumbnail  | 图片内容  | 
+  | target.url | 目标URL | 
+  | target.type   | 目标类型 (image: 图片, link: 链接) | 
+
+
 ## 3.<span id="event-definition">服务端推送事件定义</span>
 
 ### 3.1 分享裂变
 
-####（1）分享提示创建APP触发
+#### （1）分享提示创建APP触发
 
   ```json
   {
@@ -1982,7 +2057,7 @@ wss://ai.moyu.dev.openviewtech.com/push/endpoint?scrf=
   } 
   ```
 
-####（2）分享提示使用APP触发
+#### （2）分享提示使用APP触发
 
   ```json
   {
