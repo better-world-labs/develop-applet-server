@@ -431,16 +431,6 @@ func (a appSvc) transMiniAppToListDto(apps []*entity.MiniAppBaseInfo) ([]*entity
 		return nil, err
 	}
 
-	likeMap, err := a.likeComments.GetAppLikeCountMap(appIds)
-	if err != nil {
-		return nil, err
-	}
-
-	commentMap, err := a.likeComments.GetAppCommentCountMap(appIds)
-	if err != nil {
-		return nil, err
-	}
-
 	collectMap, err := a.pCollection.countByAppIds(appIds)
 	if err != nil {
 		return nil, err
@@ -473,17 +463,11 @@ func (a appSvc) transMiniAppToListDto(apps []*entity.MiniAppBaseInfo) ([]*entity
 			dto.SoldPoints = int64(statistic.RunTimes * a.Price)
 		}
 
-		if like, ok := likeMap[a.Uuid]; ok {
-			dto.LikeTimes = int(like)
-		}
-
-		if comment, ok := commentMap[a.Uuid]; ok {
-			dto.CommentTimes = int(comment)
-		}
-
 		if collect, ok := collectMap[a.Uuid]; ok {
 			dto.CollectTimes = int(collect)
 		}
+
+		dto.DegreeOfHeat = dto.DegreeOfHeat * 10
 
 		return dto
 	}), nil

@@ -26,6 +26,7 @@ func (e *EventHandler) Consume(on emitter.OnEvent) {
 	on(e.handleAppComment)
 	on(e.handleAppView)
 	on(e.handleAppLikeChanged)
+	on(e.handleAppRecommendChanged)
 	on(e.handleAppOutputLikeChanged)
 }
 
@@ -65,6 +66,16 @@ func (e *EventHandler) handleAppLikeChanged(evt *entity.MiniAppLikeChangedEvent)
 	}
 
 	return e.miniApp.DecrementAppLikeTimes(evt.AppId)
+}
+
+func (e *EventHandler) handleAppRecommendChanged(evt *entity.MiniAppLikeChangedEvent) error {
+	e.Logger.Infof("handleAppRecommendChanged appId=%s", evt.AppId)
+
+	if evt.Like {
+		return e.miniApp.IncrementAppRecommendTimes(evt.AppId)
+	}
+
+	return e.miniApp.IncrementAppRuntimes(evt.AppId)
 }
 
 func (e *EventHandler) handleAppOutputLikeChanged(evt *entity.MiniAppOutputLikeChangedEvent) error {

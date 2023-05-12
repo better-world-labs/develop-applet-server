@@ -95,6 +95,18 @@ func (m miniAppSvc) DecrementAppLikeTimes(appId string) error {
 	return err
 }
 
+func (m miniAppSvc) IncrementAppRecommendTimes(appId string) error {
+	_, err := m.Exec(fmt.Sprintf("insert %s (app_id, recommend_times) values (?, 1)  on duplicate key update "+
+		"recommend_times =  recommend_times + 1, recommend_times_updated_at = current_timestamp() ", TableNameMiniApp), appId)
+	return err
+}
+
+func (m miniAppSvc) DecrementAppRecommendTimes(appId string) error {
+	_, err := m.Exec(fmt.Sprintf("insert %s (app_id, recommend_times) values (?, 1)  on duplicate key update "+
+		"recommend_times =  IF(recommend_times = 0, 0, recommend_times - 1), recommend_times_updated_at =  current_timestamp()", TableNameMiniApp), appId)
+	return err
+}
+
 func (m miniAppSvc) IncrementAppCommentTimes(appId string) error {
 	_, err := m.Exec(fmt.Sprintf("insert %s (app_id, comment_times) values (?, 1)  on duplicate key update "+
 		"comment_times =  comment_times + 1, comment_times_updated_at =  current_timestamp()", TableNameMiniApp), appId)
@@ -128,6 +140,12 @@ func (m miniAppSvc) OverrideAppLikeTimes(appId string, t int64) error {
 func (m miniAppSvc) OverrideAppCommentTimes(appId string, t int64) error {
 	_, err := m.Exec(fmt.Sprintf("insert %s (app_id, comment_times) values (?, ?)  on duplicate key update "+
 		"comment_times = ?, comment_times_updated_at = current_timestamp() ", TableNameMiniApp), appId, t, t)
+	return err
+}
+
+func (m miniAppSvc) OverrideAppRecommendTimes(appId string, t int64) error {
+	_, err := m.Exec(fmt.Sprintf("insert %s (app_id, recommend_times) values (?, ?)  on duplicate key update "+
+		"recommend_times = ?, recommend_times_updated_at = current_timestamp() ", TableNameMiniApp), appId, t, t)
 	return err
 }
 

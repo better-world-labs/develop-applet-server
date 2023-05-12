@@ -9,6 +9,7 @@ type ILikeCommentMiniApp interface {
 	DoLikeAppOutput(entity.MiniAppOutputLike) error
 	GetAppLike(appId string, userId int64) (entity.MiniAppLike, error)
 	ListUserOutputLikeState(outputIds []string, userId int64) ([]*entity.UserOutputLikeState, error)
+	IsAppsLiked(appId []string, userId int64) (map[string]bool, error)
 	GetAppLikeCountMap(appIds []string) (map[string]int64, error)
 	GetAppCommentCountMap(appIds []string) (map[string]int64, error)
 	CreateAppComment(comment entity.MiniAppComment) error

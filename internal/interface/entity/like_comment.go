@@ -24,6 +24,11 @@ type MiniAppOutputLike struct {
 	UpdatedAt int64 `json:"updatedAt"`
 }
 
+type UserLikeState struct {
+	AppId string `json:"appId"`
+	Like  bool   `json:"like"`
+}
+
 type UserOutputLikeState struct {
 	OutputId string   `json:"outputId"`
 	Like     LikeType `json:"like" binding:"min=-1,max=1"`

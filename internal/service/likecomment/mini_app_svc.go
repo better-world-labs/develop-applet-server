@@ -228,6 +228,32 @@ func (s miniAppSvc) ListUserOutputLikeState(outputIds []string, userId int64) ([
 	}), err
 }
 
+func (s miniAppSvc) IsAppsLiked(appIds []string, userId int64) (map[string]bool, error) {
+	states, err := s.mapLikedStates(appIds, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, appId := range appIds {
+		if _, ok := states[appId]; !ok {
+			states[appId] = false
+		}
+	}
+
+	return states, nil
+}
+
+func (s miniAppSvc) mapLikedStates(appIds []string, userId int64) (map[string]bool, error) {
+	var res []*entity.UserLikeState
+	if err := s.Table(entity.MiniAppLike{}).In("app_id", appIds).And("created_by = ?", userId).Find(&res); err != nil {
+		return nil, err
+	}
+
+	return collection.ToMap(res, func(state *entity.UserLikeState) (string, bool) {
+		return state.AppId, state.Like
+	}), nil
+}
+
 func (s miniAppSvc) listOutputsLikeStates(outputIds []string, userId int64) ([]*entity.UserOutputLikeState, error) {
 	var res []*entity.UserOutputLikeState
 	return res, s.Table(entity.MiniAppOutputLike{}).In("output_id", outputIds).And("created_by = ?", userId).Find(&res)

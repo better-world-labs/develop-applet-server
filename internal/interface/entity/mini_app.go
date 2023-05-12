@@ -31,6 +31,7 @@ type MiniAppBaseInfo struct {
 	CreatedAt     time.Time     `json:"createdAt"`
 	UpdatedAt     time.Time     `json:"updatedAt"`
 	Status        MiniAppStatus `json:"status"`
+	Top           int           `json:"top"`
 }
 
 type MiniAppOutputStatisticInfo struct {
@@ -40,11 +41,14 @@ type MiniAppOutputStatisticInfo struct {
 }
 
 type MiniAppStatisticInfo struct {
-	RunTimes     int `json:"runTimes"`
-	UseTimes     int `json:"useTimes"`
-	LikeTimes    int `json:"likeTimes"`
-	CommentTimes int `json:"commentTimes"`
-	CollectTimes int `xorm:"-" json:"collectTimes"`
+	RunTimes       int `json:"runTimes"`
+	UseTimes       int `json:"useTimes"`
+	LikeTimes      int `json:"likeTimes"`
+	CommentTimes   int `json:"commentTimes"`
+	CollectTimes   int `xorm:"-" json:"collectTimes"`
+	ViewTimes      int `json:"-"`
+	RecommendTimes int `json:"recommendTimes"`
+	DegreeOfHeat   int `json:"degreeOfHeat"`
 }
 
 type MiniAppDetailDto struct {

@@ -21,6 +21,7 @@ type cron struct {
 	miniApp     service.IStatisticMiniApp   `gone:"*"`
 	miniAppSvc  service.IMiniApp            `gone:"*"`
 	likeComment service.ILikeCommentMiniApp `gone:"*"`
+	recommend   service.IRecommendMiniApp   `gone:"*"`
 
 	jobSpecStatisticRevise     string `gone:"config,cron.statistic.revise"`
 	jobSpecComputeDegreeOfHeat string `gone:"config,cron.statistic.compute-degree-of-heat"`
@@ -49,7 +50,25 @@ func (c cron) statisticRevise() {
 		if err != nil {
 			c.Warnf("appCommentStatisticRevise error: appId=%s, %v\n", appId, err)
 		}
+
+		err = c.appRecommendStatisticRevise(appId)
+		if err != nil {
+			c.Warnf("appRecommendStatisticRevise error: appId=%s, %v\n", appId, err)
+		}
 	}
+}
+
+func (c cron) appRecommendStatisticRevise(appId string) error {
+	countMap, err := c.recommend.GetAppRecommendCountMap([]string{appId})
+	if err != nil {
+		return err
+	}
+
+	if count, ok := countMap[appId]; ok {
+		return c.miniApp.OverrideAppRecommendTimes(appId, count)
+	}
+
+	return nil
 }
 
 func (c cron) appCommentStatisticRevise(appId string) error {
@@ -95,7 +114,7 @@ func (c cron) computeAppDegreeOfHeat(appId string) error {
 	}
 
 	c.mergeStatistic(app, outputs)
-	return c.miniApp.OverrideAppDegreeOfHeat(appId, float32(app.RunTimes)*0.6+float32(app.LikeTimes)*0.1+float32(app.CommentTimes)*0.1)
+	return c.miniApp.OverrideAppDegreeOfHeat(appId, float32(app.ViewTimes)*0.6+float32(app.RunTimes)*0.2)
 }
 
 func (c cron) mergeStatistic(app *entity.MiniAppDetailDto, outputs []*entity.MiniAppOutputDto) {

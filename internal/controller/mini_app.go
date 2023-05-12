@@ -29,6 +29,7 @@ type miniAppController struct {
 	PubRouter     gin.IRouter                 `gone:"router-pub"`
 	svc           service.IMiniApp            `gone:"*"`
 	likeComment   service.ILikeCommentMiniApp `gone:"*"`
+	recommend     service.IRecommendMiniApp   `gone:"*"`
 	system        service.ISystemConfig       `gone:"*"`
 }
 
@@ -49,6 +50,9 @@ func (con *miniAppController) Mount() gin.MountError {
 		POST("/apps/:uuid/comments", con.addComment).
 		GET("/apps/:uuid/comments", con.listComments).
 		POST("/apps/:uuid/like", con.likeApp).
+		POST("/apps/is-liked", con.isAppLiked).
+		POST("/apps/:uuid/recommend", con.recommendApp).
+		POST("/apps/is-recommended", con.isAppRecommended).
 		POST("/outputs/:id/like", con.likeOutput).
 		GET("/outputs/likes", con.listOutputsLikes).
 		GET("/apps/:uuid/like", con.getAppLike).
@@ -314,6 +318,23 @@ func (con *miniAppController) likeApp(ctx *gin.Context) (any, error) {
 	return nil, con.likeComment.LikeApp(like)
 }
 
+func (con *miniAppController) recommendApp(ctx *gin.Context) (any, error) {
+	appId := ctx.Param("uuid")
+	userId := utils.CtxMustGetUserId(ctx)
+	recommend := entity.MiniAppRecommend{
+		AppId:     appId,
+		CreatedBy: userId,
+		UpdatedAt: time.Now().UnixMilli(),
+	}
+
+	err := ctx.ShouldBindJSON(&recommend)
+	if err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	return nil, con.recommend.RecommendApp(recommend)
+}
+
 func (con *miniAppController) listComments(ctx *gin.Context) (any, error) {
 	appId := ctx.Param("uuid")
 	comments, err := con.likeComment.ListAppComments(appId)
@@ -413,4 +434,30 @@ func (con *miniAppController) checkAppsCollected(ctx *gin.Context) (any, error) 
 	}
 
 	return con.svc.IsAppsCollected(param.Uuids, userId)
+}
+
+func (con *miniAppController) isAppLiked(ctx *gin.Context) (any, error) {
+	userId := utils.CtxMustGetUserId(ctx)
+	var param struct {
+		AppIds []string `json:"appIds" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	return con.likeComment.IsAppsLiked(param.AppIds, userId)
+}
+
+func (con *miniAppController) isAppRecommended(ctx *gin.Context) (any, error) {
+	userId := utils.CtxMustGetUserId(ctx)
+	var param struct {
+		AppIds []string `json:"appIds" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	return con.recommend.IsAppsRecommended(param.AppIds, userId)
 }

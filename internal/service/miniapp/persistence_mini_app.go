@@ -21,7 +21,10 @@ func NewPMiniApp() gone.Goner {
 
 func (p pMiniApp) listApp(category int64) ([]*entity.MiniAppBaseInfo, error) {
 	var arr []*entity.MiniAppBaseInfo
-	session := p.Table(entity.MiniApp{}).Alias("m").Join("LEFT", []any{entity.StatisticMiniApp{}, "s"}, "m.uuid = s.app_id").Desc("degree_of_heat")
+	session := p.Table(entity.MiniApp{}).
+		Alias("m").
+		Join("LEFT", []any{entity.StatisticMiniApp{}, "s"}, "m.uuid = s.app_id").
+		Desc("top", "degree_of_heat", "m.id")
 	if category > 0 {
 		session = session.Where("category = ?", category)
 	}

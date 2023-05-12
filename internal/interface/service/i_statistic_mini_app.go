@@ -25,6 +25,10 @@ type IStatisticMiniApp interface {
 
 	DecrementAppLikeTimes(appId string) error
 
+	IncrementAppRecommendTimes(appId string) error
+
+	DecrementAppRecommendTimes(appId string) error
+
 	OverrideAppViewTimes(appId string, t int64) error
 
 	OverrideAppRuntimes(appId string, t int64) error
@@ -34,6 +38,8 @@ type IStatisticMiniApp interface {
 	OverrideAppCommentTimes(appId string, t int64) error
 
 	OverrideAppLikeTimes(appId string, t int64) error
+
+	OverrideAppRecommendTimes(appId string, t int64) error
 
 	OverrideAppDegreeOfHeat(appId string, v float32) error
 
