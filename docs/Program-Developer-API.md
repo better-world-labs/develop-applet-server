@@ -9,7 +9,8 @@
 - 新增文档 1.9 用户
 - 新增接口 1.9.3 读取用户个人统计
 - 新增接口 1.2.4 读取某用户的应用
-- [用户上报事件](#user-event-definition)增加事件类型 热度标记
+- 新增接口 1.3.10 批量读取我对应用的推荐状态
+- 新增接口 1.3.11 对应用进行推荐/取消推荐
 
 [[_TOC_]]
 
@@ -1114,7 +1115,7 @@ X-Request-ID: {id}
 - 请求
 
   ```http
-  POST /api/apps/:id/get-likes HTTP/1.1
+  POST /api/apps/get-likes HTTP/1.1
   
   {
     "appIds": ["xxx"]
@@ -1233,7 +1234,63 @@ X-Request-ID: {id}
     }
   }
    ```
+  
+#### 1.3.10 批量读取我对应用的推荐状态
 
+- 请求
+
+  ```http
+  POST /api/apps/get-recommends HTTP/1.1
+  
+  {
+    "appIds": ["xxx"]
+  }
+  ```
+
+- 其中
+
+  | 字段  | 说明  |
+  |-----| --- |
+  | 推荐   | 是，否 |
+
+- 应答
+
+  ```js
+  resp = {
+    "code": 0,
+    "data": {
+      "app1": true,
+      "app2": true,
+      "app3": false,
+    }
+  }
+   ```
+  ***输入参数均会出现在应答中***
+
+#### 1.3.11 对应用进行推荐/取消推荐
+
+- 请求
+
+  ```http
+  POST /api/apps/:id/recommend HTTP/1.1
+
+  {
+    "recommend": true
+  }
+  ```
+- 其中
+
+  | 字段  | 说明   |
+  |------| --- |
+  | recommend   | 是否推荐 |
+
+- 应答
+
+  ```js
+  resp = {
+    "code": 0
+  }
+   ```
 ### 1.4 新手引导
 
 ### 1.4.1 读取新手引导完成状态
@@ -1898,21 +1955,6 @@ wss://ai.moyu.dev.openviewtech.com/push/endpoint?scrf=
   ```json
   {
     "type": "app-viewed",
-    "args": ["uuid"]
-  }
-  ``` 
-
-- 其中
-
-  | 字段     |类型 | 说明   |
-  | -------|------| --- |
-  | args[0] | 字符串 | App uuid| 
-
-#### (2) 热度标记
-
-  ```json
-  {
-    "type": "app-hot-mark",
     "args": ["uuid"]
   }
   ``` 
