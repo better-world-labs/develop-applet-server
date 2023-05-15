@@ -2,7 +2,7 @@
 
 ### 修改记录
 
-- 1.2.1 读取应用列表,1.2.2 读取我创建的应用, 1.2.3 读取我收藏的应用, 1.2.6 读取某个应用 增加 `recommendTimes` 字段
+- 1.2.1 读取应用列表,1.2.2 读取我创建的应用, 1.2.3 读取我收藏的应用, 1.2.6 读取某个应用 增加 `recommendTimes`,`degreeOfHeat` 字段
 - 1.2.10 读取某个应用的运行结果 增加 `nextCursor` 返回以支持分页
 - 新增接口 1.2.11 读取某个运行结果
 - 新增接口 1.3.6 批量读取我对应用的点赞状态
@@ -188,6 +188,7 @@ X-Request-ID: {id}
            "runTimes": 12,
            "useTimes": 11,
            "recommendTimes": 2345,
+           "degreeOfHeat": 325,
            "commentTimes": 10,
            "likeTimes": 2,
            "createdAt": "2023-03-22T07:08:02.851Z",
@@ -252,6 +253,7 @@ X-Request-ID: {id}
           },
           "runTimes": 12,
           "recommendTimes": 2345,
+          "degreeOfHeat": 325,
           "useTimes": 11,
           "commentTimes": 10,
           "likeTimes": 2,
@@ -310,6 +312,7 @@ X-Request-ID: {id}
           "runTimes": 12,
           "useTimes": 11,
           "recommendTimes": 2345,
+          "degreeOfHeat": 325,
           "commentTimes": 10,
           "likeTimes": 2,
           "status": 0 // 生命周期 (0.未发布 1.已发布)
@@ -368,6 +371,7 @@ X-Request-ID: {id}
           "runTimes": 12,
           "useTimes": 11,
           "recommendTimes": 2345,
+          "degreeOfHeat": 325,
           "commentTimes": 10,
           "likeTimes": 2,
           "status": 0 // 生命周期 (0.未发布 1.已发布)
@@ -525,6 +529,7 @@ X-Request-ID: {id}
       "commentTimes": 10,
       "likeTimes": 2,
       "recommendTimes": 2345,
+      "degreeOfHeat": 325,
       "createdAt": "2023-03-22T07:08:02.851Z",
       "updatedAt": "2023-03-22T07:08:02.851Z",
       "status": 0 // 生命周期 (0.未发布 1.已发布)
