@@ -41,6 +41,7 @@ func (con *miniAppController) Mount() gin.MountError {
 		GET("/app-tabs", con.getAppTabs)
 
 	con.AuthRouter.
+		GET("/users/:userId/apps", con.listUsersApps).
 		GET("/apps/mine", con.listAppsByUser).
 		GET("/apps/collected", con.listCollectedApps).
 		POST("/apps/:uuid/collect", con.collectApp).
@@ -460,4 +461,18 @@ func (con *miniAppController) isAppRecommended(ctx *gin.Context) (any, error) {
 	}
 
 	return con.recommend.IsAppsRecommended(param.AppIds, userId)
+}
+
+func (con *miniAppController) listUsersApps(ctx *gin.Context) (any, error) {
+	userId, err := utils.CtxPathParamInt64(ctx, "userId")
+	if err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	var query page.StreamQuery
+	if err := query.BindQuery(ctx); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	return con.svc.PageUsersApps(query, userId)
 }

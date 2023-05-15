@@ -312,6 +312,20 @@ func (a appSvc) CreateOutput(output *entity.MiniAppOutput) error {
 	return a.pMiniApp.createOutput(output)
 }
 
+func (a appSvc) PageUsersApps(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.MiniAppListDto], error) {
+	apps, err := a.pMiniApp.pageAppsByUserId(query, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	dtos, err := a.transMiniAppToListDto(apps.GetList())
+	if err != nil {
+		return nil, err
+	}
+
+	return page.NewStreamResult(dtos), nil
+}
+
 func (a appSvc) PageOpenedAppOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutputDto], int64, error) {
 	outputs, err := a.pMiniApp.pageOpenedOutputsByAppId(query, uuid)
 	if err != nil {

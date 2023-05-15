@@ -155,6 +155,21 @@ func (p pMiniApp) countOutputsAppIdByUserId(userId int64) (int64, error) {
 		Where("created_by = ?", userId).Distinct("app_id").Count()
 }
 
+func (p pMiniApp) pageAppsByUserId(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.MiniAppBaseInfo], error) {
+	var arr []*entity.MiniAppBaseInfo
+
+	session := p.Table(entity.MiniApp{}).Where("created_by = ?", userId)
+	if query.CursorIndicator() > 0 {
+		session.Where("id < ?", query.CursorIndicator())
+	}
+
+	if err := session.Desc("id").Limit(query.Size(), 0).Find(&arr); err != nil {
+		return nil, err
+	}
+
+	return page.NewStreamResult(arr), nil
+}
+
 func (p pMiniApp) pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutput], error) {
 	var arr []*entity.MiniAppOutput
 

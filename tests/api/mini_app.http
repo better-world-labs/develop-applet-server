@@ -300,3 +300,9 @@ X-Csrf-Token: {{csrf}}
 {
   "uuids": ["95e047ec-7daf-4af8-99b5-f25913d710c0","1","2"]
 }
+
+###
+GET {{host}}/api/users/10045/apps?cursor=MjQ= HTTP/1.1
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}

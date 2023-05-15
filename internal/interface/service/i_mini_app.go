@@ -48,6 +48,8 @@ type (
 
 		PageOpenedAppOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutputDto], int64, error)
 
+		PageUsersApps(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.MiniAppListDto], error)
+
 		ListOpenedAppOutputsByAppId(uuid string) ([]*entity.MiniAppOutputDto, error)
 
 		ListAIModels() ([]*entity.MiniAppAiModel, error)

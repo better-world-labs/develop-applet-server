@@ -39,4 +39,5 @@ type iAppPersistence interface {
 	countUserAppRuntimes(userId int64) (int64, error)
 	countOutputsByAppId(appId string) (int64, error)
 	pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutput], error)
+	pageAppsByUserId(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.MiniAppBaseInfo], error)
 }
