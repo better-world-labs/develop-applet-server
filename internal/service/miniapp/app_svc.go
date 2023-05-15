@@ -412,7 +412,7 @@ func (a appSvc) transMiniAppToListDto(apps []*entity.MiniAppBaseInfo) ([]*entity
 	appIds := collection.Map(apps, func(app *entity.MiniAppBaseInfo) string {
 		return app.Uuid
 	})
-	outputs, err := a.pMiniApp.getLastNOutputByAppIds(appIds, 2)
+	outputs, err := a.getRandomNOutputByAppIds(appIds, 2)
 	if err != nil {
 		return nil, err
 	}
@@ -519,4 +519,22 @@ func (a appSvc) CountUserCreatedApps(userId int64) (int64, error) {
 
 func (a appSvc) CountUserRanApps(userId int64) (int64, error) {
 	return a.pMiniApp.countOutputsAppIdByUserId(userId)
+}
+
+func (a appSvc) getRandomNOutputByAppIds(ids []string, random int) (map[string][]*entity.MiniAppOutput, error) {
+	last20Outputs, err := a.pMiniApp.getLastNOutputByAppIds(ids, 20)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, outputs := range last20Outputs {
+		ShuffleSlice(outputs)
+		if len(outputs) > random {
+			outputs = outputs[:random]
+		}
+
+		last20Outputs[key] = outputs
+	}
+
+	return last20Outputs, nil
 }
