@@ -27,6 +27,10 @@ type User struct {
 	CreatedAt           time.Time  `json:"createdAt"`
 }
 
+func (u User) RegisteredDays() int {
+	return int(time.Now().Sub(u.CreatedAt).Hours() / 24)
+}
+
 func (u User) IsFirstLogin() bool {
 	return u.LastLoginAt == nil
 }

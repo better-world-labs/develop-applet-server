@@ -521,6 +521,10 @@ func (a appSvc) CountUserRanApps(userId int64) (int64, error) {
 	return a.pMiniApp.countOutputsAppIdByUserId(userId)
 }
 
+func (a appSvc) CountUsersAppsRuntimes(userId int64) (int64, error) {
+	return a.pMiniApp.countUserAppRuntimes(userId)
+}
+
 func (a appSvc) getRandomNOutputByAppIds(ids []string, random int) (map[string][]*entity.MiniAppOutput, error) {
 	last20Outputs, err := a.pMiniApp.getLastNOutputByAppIds(ids, 20)
 	if err != nil {

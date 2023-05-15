@@ -27,9 +27,12 @@ func NewUserController() gone.Goner {
 type userController struct {
 	gone.Flag
 	logrus.Logger `gone:"gone-logger"`
-	AuthRouter    gin.IRouter   `gone:"router-auth"`
-	PubRouter     gin.IRouter   `gone:"router-pub"`
-	UserService   service.IUser `gone:"*"`
+	AuthRouter    gin.IRouter                 `gone:"router-auth"`
+	PubRouter     gin.IRouter                 `gone:"router-pub"`
+	UserService   service.IUser               `gone:"*"`
+	LikeComment   service.ILikeCommentMiniApp `gone:"*"`
+	MiniApp       service.IMiniApp            `gone:"*"`
+	Points        service.IPoints             `gone:"*"`
 }
 
 func (ctr *userController) Mount() gin.MountError {
@@ -44,6 +47,7 @@ func (ctr *userController) Mount() gin.MountError {
 		PUT("/me/work-off-time", ctr.updateWorkOffTime).
 		PUT("/me/boss-key", ctr.updateBossKey).
 		GET("/off-time-earlier", ctr.calculateEarlierThan).
+		GET("/statistic", ctr.userStatistic).
 		POST("/me/browse-duration", ctr.updateBrowseDuration).
 		GET("/moyu-detail", ctr.getMoyuDetail).
 		PUT("/me/work-settings", ctr.updateWorkSettings).
@@ -275,4 +279,40 @@ func (ctr *userController) postEvent(ctx *gin.Context) (any, error) {
 	}
 
 	return nil, ctr.UserService.PostEvent(&event)
+}
+
+func (ctr *userController) userStatistic(ctx *gin.Context) (any, error) {
+	userId := utils.CtxMustGetUserId(ctx)
+	likes, err := ctr.LikeComment.CountUserAppsLikes(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	userInfo, err := ctr.UserService.GetUserById(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	apps, err := ctr.MiniApp.CountUserCreatedApps(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	runTimes, err := ctr.MiniApp.CountUsersAppsRuntimes(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	points, err := ctr.Points.GetUserPoints(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]any{
+		"apps":           apps,
+		"registeredDays": userInfo.RegisteredDays(),
+		"points":         points,
+		"appUses":        runTimes,
+		"appLikes":       likes,
+	}, nil
 }

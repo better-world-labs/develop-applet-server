@@ -146,6 +146,10 @@ func (p pMiniApp) countOutputsByAppId(appId string) (int64, error) {
 	return p.Table(entity.MiniAppOutput{}).Where("app_id = ?", appId).Count()
 }
 
+func (p pMiniApp) countUserAppRuntimes(userId int64) (int64, error) {
+	return p.Where("app_id in (select uuid from mini_app where created_by = ?)", userId).Count(&entity.MiniAppOutput{})
+}
+
 func (p pMiniApp) countOutputsAppIdByUserId(userId int64) (int64, error) {
 	return p.Table(entity.MiniAppOutput{}).
 		Where("created_by = ?", userId).Distinct("app_id").Count()

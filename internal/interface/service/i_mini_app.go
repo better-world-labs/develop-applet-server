@@ -59,6 +59,8 @@ type (
 		CountUserCreatedApps(userId int64) (int64, error)
 
 		CountUserRanApps(userId int64) (int64, error)
+
+		CountUsersAppsRuntimes(userId int64) (int64, error)
 	}
 )
 

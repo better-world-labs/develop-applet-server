@@ -4,6 +4,7 @@ import "gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 
 type ILikeCommentMiniApp interface {
 	LikeApp(entity.MiniAppLike) error
+	CountUserAppsLikes(userId int64) (int64, error)
 	LikeAppOutput(output entity.MiniAppOutputLike) error
 	DoLikeApp(entity.MiniAppLike) error
 	DoLikeAppOutput(entity.MiniAppOutputLike) error

@@ -45,6 +45,10 @@ func (s miniAppSvc) LikeApp(like entity.MiniAppLike) error {
 	return s.Sender.Send(&entity.MiniAppLikeEvent{MiniAppLike: like})
 }
 
+func (s miniAppSvc) CountUserAppsLikes(userId int64) (int64, error) {
+	return s.Where("created_by = ? and `like` = 1", userId).Count(entity.MiniAppLike{})
+}
+
 func (s miniAppSvc) LikeAppOutput(like entity.MiniAppOutputLike) error {
 	has, err := s.MiniApp.CheckOutputExists(like.OutputId)
 	if err != nil {

@@ -118,3 +118,9 @@ X-Csrf-Token: {{csrf}}
   "monthlySalary": 14000,
   "monthlyWorkingDays": 26
 }
+
+###
+GET {{host}}/api/users/statistic
+Content-Type: application/json;charset=utf8
+Cookie: {{cookie}}
+X-Csrf-Token: {{csrf}}
