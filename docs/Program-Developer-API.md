@@ -1931,7 +1931,7 @@ X-Request-ID: {id}
     PUT /admin-api/apps/top-sorting HTTP/1.1
   
     {
-        "uuids":["xxx1","xxx2","xxx3"]
+        "appIds":["xxx1","xxx2","xxx3"]
     }
     ```
 
