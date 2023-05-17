@@ -46,7 +46,7 @@ type MiniAppStatisticInfo struct {
 	LikeTimes      int `json:"likeTimes"`
 	CommentTimes   int `json:"commentTimes"`
 	CollectTimes   int `xorm:"-" json:"collectTimes"`
-	ViewTimes      int `json:"-"`
+	ViewTimes      int `json:"viewTimes"`
 	RecommendTimes int `json:"recommendTimes"`
 	DegreeOfHeat   int `json:"degreeOfHeat"`
 }

@@ -12,6 +12,10 @@
 - 新增接口 1.3.10 批量读取我对应用的推荐状态
 - 新增接口 1.3.11 对应用进行推荐/取消推荐
 - 新增接口文档 1.11 系统配置，对各种 key 进行描述,增加运营位相关 key
+- 新增接口 1.11 系统配置，对各种 key 进行描述,增加运营位相关 key
+- 新增接口 1.9.5 管理后台小程序置顶 (需要管理权限)
+- 新增接口 1.9.6 管理后台置顶小程序排序 (需要管理权限)
+- 新增接口 1.9.7 管理后台读取小程序列表 
 
 [[_TOC_]]
 
@@ -1901,6 +1905,113 @@ X-Request-ID: {id}
     };
     ```
 
+#### 1.9.5 后台管理小程序置顶
+
+- 请求
+ 
+    ```http
+    PUT /admin-api/apps/:uuid/top HTTP/1.1
+    ```
+  
+- 应答
+ 
+    ```js
+    httpRes = {
+        "code": 0
+    };
+    ```
+
+#### 1.9.6 后台管理置顶小程序排序
+
+  如小程序未置顶则忽略
+
+- 请求
+
+    ```http
+    PUT /admin-api/apps/top-sorting HTTP/1.1
+  
+    {
+        "uuids":["xxx1","xxx2","xxx3"]
+    }
+    ```
+
+- 其中
+  
+  | 字段| 说明                  |
+  |---------------------| --- |
+  | appIds | 排序后的置顶 小程序的 uuid 序列 |
+ 
+- 应答
+
+    ```js
+    httpRes = {
+        "code": 0
+    };
+    ```
+
+#### 1.9.7 后台管理读取应用列表
+
+按照热度排序
+
+- 请求
+
+  ```http
+  GET /admin-api/apps?category=1 HTTP/1.1
+  ```
+
+- 其中
+
+  | 字段   | 说明   |
+      |------| --- |
+  | category    | 应用类型ID,非必传 |
+
+- 应答
+
+  ```js
+  // HTTP/1.1 200 OK
+  
+  res = {
+    "code": 0,
+    "data": {
+      "list": [
+        {
+           "id": 1,
+           "uuid": "uuid",
+           "name": "模板名称",
+           "price": 5, //花费积分
+           "soldPoints": 100,
+           "description": "模板描述",
+           "results": [
+             {
+               "id": 1,
+               "type": "text",
+               "content": "xxxxxxxxxxxxxxxxxxx"
+             },
+             {
+               "id": 1,
+               "type": "text",
+               "content": "xxxxxxxxxxxxxxxxxxx"
+             }
+           ],
+           "createdBy": {
+             "id": 12,
+             "nickname": "xxxx",
+             "avatar": "http://xxx/xxx"
+           },
+           "runTimes": 12,
+           "useTimes": 11,
+           "recommendTimes": 2345,
+           "degreeOfHeat": 325,
+           "commentTimes": 10,
+           "likeTimes": 2,
+           "createdAt": "2023-03-22T07:08:02.851Z",
+           "updatedAt": "2023-03-22T07:08:02.851Z",
+           "status": 0 // 生命周期 (0.未发布 1.已发布)
+        }
+      ]
+    }
+  };
+  ```
 
 ### 1.10 服务端推送
 
