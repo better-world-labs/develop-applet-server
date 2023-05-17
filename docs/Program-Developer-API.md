@@ -1998,6 +1998,7 @@ X-Request-ID: {id}
              "nickname": "xxxx",
              "avatar": "http://xxx/xxx"
            },
+           "viewTimes": 12,
            "runTimes": 12,
            "useTimes": 11,
            "recommendTimes": 2345,
