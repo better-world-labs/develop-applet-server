@@ -154,13 +154,13 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: __app_name__
+                name: __APP_NAME__
                 port:
                   number: 80
           - path: /api/apps
             pathType: ImplementationSpecific
             backend:
               service:
-                name: __app_name__
+                name: __APP_NAME__
                 port:
                   number: 80
