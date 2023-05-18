@@ -482,7 +482,7 @@ func (con *miniAppController) listUsersApps(ctx *gin.Context) (any, error) {
 
 func (con *miniAppController) topSorting(ctx *gin.Context) (any, error) {
 	var param struct {
-		AppIds []string `json:"AppIds" binding:"required"`
+		AppIds []string `json:"appIds" binding:"required"`
 	}
 
 	return nil, con.svc.SortApps(param.AppIds)
