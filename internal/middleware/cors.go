@@ -4,7 +4,6 @@ import (
 	"github.com/gone-io/gone"
 	"github.com/gone-io/gone/goner/gin"
 	"github.com/gone-io/gone/goner/logrus"
-	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
 	"net/http"
 )
 
@@ -15,13 +14,11 @@ func NewCorsMiddleware() gone.Goner {
 
 type CorsMiddleware struct {
 	gone.Flag
-	CookieJwtKey      string        `gone:"config,cookie.jwt-key"`
-	CookieClientIdKey string        `gone:"config,cookie.client-id-key"`
-	User              service.IUser `gone:"*"`
-	logrus.Logger     `gone:"gone-logger"`
+	logrus.Logger `gone:"gone-logger"`
 }
 
 func (m *CorsMiddleware) Next(c *gin.Context) (interface{}, error) {
+	m.Infof("handle CorsMiddleware request=%s\n", c.Request.URL)
 	method := c.Request.Method
 
 	c.Header("Access-Control-Allow-Origin", "*")
@@ -34,6 +31,7 @@ func (m *CorsMiddleware) Next(c *gin.Context) (interface{}, error) {
 	//放行所有OPTIONS方法
 	if method == "OPTIONS" {
 		c.AbortWithStatus(http.StatusNoContent)
+		return nil, nil
 	}
 	// 处理请求
 	c.Next()
