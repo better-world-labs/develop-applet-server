@@ -19,7 +19,7 @@ type AdminMiddleware struct {
 	gone.Flag
 	logrus.Logger `gone:"gone-logger"`
 	user          service.IUser `gone:"*"`
-	secret        string        `gone:"config,auth.admin.secret"`
+	secret        string        `gone:"config,jwt.admin.secret"`
 }
 
 func (m *AdminMiddleware) CheckToken(ctx *gin.Context) (int64, error) {
