@@ -65,7 +65,6 @@ func (con *miniAppController) Mount() gin.MountError {
 
 	con.AdminRouter.
 		GET("/apps", con.listApps).
-		GET("/app-categories", con.getAppCategories).
 		PUT("/apps/top-sorting", con.topSorting).
 		PUT("/apps/:uuid/top", con.topApp)
 	return nil

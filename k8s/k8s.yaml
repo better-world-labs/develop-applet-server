@@ -150,3 +150,10 @@ spec:
                 name: __APP_NAME__
                 port:
                   number: 80
+          - path: /api/app-categories
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: __APP_NAME__
+                port:
+                  number: 80
