@@ -484,6 +484,9 @@ func (con *miniAppController) topSorting(ctx *gin.Context) (any, error) {
 	var param struct {
 		AppIds []string `json:"appIds" binding:"required"`
 	}
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
 
 	return nil, con.svc.SortApps(param.AppIds)
 }
