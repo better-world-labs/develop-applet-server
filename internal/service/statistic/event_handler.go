@@ -68,10 +68,10 @@ func (e *EventHandler) handleAppLikeChanged(evt *entity.MiniAppLikeChangedEvent)
 	return e.miniApp.DecrementAppLikeTimes(evt.AppId)
 }
 
-func (e *EventHandler) handleAppRecommendChanged(evt *entity.MiniAppLikeChangedEvent) error {
+func (e *EventHandler) handleAppRecommendChanged(evt *entity.MiniAppRecommendChangedEvent) error {
 	e.Logger.Infof("handleAppRecommendChanged appId=%s", evt.AppId)
 
-	if evt.Like {
+	if evt.Recommend {
 		return e.miniApp.IncrementAppRecommendTimes(evt.AppId)
 	}
 
