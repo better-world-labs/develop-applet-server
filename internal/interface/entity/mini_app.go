@@ -31,7 +31,7 @@ type MiniAppBaseInfo struct {
 	CreatedAt     time.Time     `json:"createdAt"`
 	UpdatedAt     time.Time     `json:"updatedAt"`
 	Status        MiniAppStatus `json:"status"`
-	Top           int           `json:"top"`
+	Top           int           `json:"-"`
 }
 
 type MiniAppOutputStatisticInfo struct {
