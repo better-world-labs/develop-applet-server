@@ -27,6 +27,7 @@ type adminRouter struct {
 }
 
 func (r *adminRouter) AfterRevive() gone.AfterReviveError {
-	r.IRouter = r.root.Group("/admin-api", r.Cors.Next, r.Auth.Next)
+	r.root.Use(r.Cors.Next)
+	r.IRouter = r.root.Group("/admin-api", r.Auth.Next)
 	return nil
 }
