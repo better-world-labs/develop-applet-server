@@ -26,6 +26,7 @@ type miniAppController struct {
 
 	logrus.Logger `gone:"gone-logger"`
 	AuthRouter    gin.IRouter                 `gone:"router-auth"`
+	AdminRouter   gin.IRouter                 `gone:"router-admin"`
 	PubRouter     gin.IRouter                 `gone:"router-pub"`
 	svc           service.IMiniApp            `gone:"*"`
 	likeComment   service.ILikeCommentMiniApp `gone:"*"`
@@ -62,6 +63,8 @@ func (con *miniAppController) Mount() gin.MountError {
 		GET("/ai-models", con.listAIModels).
 		GET("", con.listAIModels)
 
+	con.AdminRouter.PUT("/apps/top-sorting", con.topSorting)
+	con.AdminRouter.PUT("/apps/:uuid/top", con.topApp)
 	return nil
 }
 
@@ -475,4 +478,18 @@ func (con *miniAppController) listUsersApps(ctx *gin.Context) (any, error) {
 	}
 
 	return con.svc.PageUsersApps(query, userId)
+}
+
+func (con *miniAppController) topSorting(ctx *gin.Context) (any, error) {
+	var param struct {
+		AppIds []string `json:"AppIds" binding:"required"`
+	}
+
+	return nil, con.svc.SortApps(param.AppIds)
+}
+
+func (con *miniAppController) topApp(ctx *gin.Context) (any, error) {
+	appId := ctx.Param("uuid")
+
+	return nil, con.svc.TopApp(appId)
 }

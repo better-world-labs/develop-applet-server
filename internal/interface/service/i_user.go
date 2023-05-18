@@ -19,6 +19,8 @@ type IUser interface {
 	//ParseJwtInfo 解析jwt
 	ParseJwtInfo(ctx *gin.Context) (userId int64, err gone.Error)
 
+	ParseJwt(token, secret string) (int64, error)
+
 	//Login 用户登录
 	Login(ctx *gin.Context, user *entity.UserSimple) (rst *entity.LoginRst, err error)
 

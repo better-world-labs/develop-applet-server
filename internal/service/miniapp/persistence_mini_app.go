@@ -2,6 +2,7 @@ package miniapp
 
 import (
 	"github.com/gone-io/gone"
+	"github.com/gone-io/gone/goner/gin"
 	"github.com/gone-io/gone/goner/xorm"
 	"gitlab.openviewtech.com/gone/gone-lib/collection"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
@@ -168,6 +169,33 @@ func (p pMiniApp) pageAppsByUserId(query page.StreamQuery, userId int64) (*page.
 	}
 
 	return page.NewStreamResult(arr), nil
+}
+
+func (p pMiniApp) markAppTop(appId string) error {
+	_, err := p.Exec("update mini_app set top = 1 where uuid = ? and top = 0", appId)
+	return err
+}
+
+func (p pMiniApp) sortApps(appIds []string) error {
+	return p.Transaction(func(session xorm.Interface) error {
+		count, err := p.Where("top > 0").Count(entity.MiniApp{})
+		if err != nil {
+			return err
+		}
+
+		if count != int64(len(appIds)) {
+			return gin.NewParameterError(err.Error())
+		}
+
+		for sort, i := range appIds {
+			_, err := p.Exec("update mini_app set top = ? where id = ?", sort+1, i)
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 }
 
 func (p pMiniApp) pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutput], error) {

@@ -22,6 +22,10 @@ type (
 		// ListApps category=0 则不筛选
 		ListApps(category int64) ([]*entity.MiniAppListDto, error)
 
+		TopApp(appId string) error
+
+		SortApps(appIds []string) error
+
 		ListAppsByUuids(uuids []string) ([]*entity.MiniAppListDto, error)
 
 		ListAppsByUser(userId, category int64) ([]*entity.MiniAppListDto, error)

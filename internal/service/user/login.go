@@ -33,6 +33,22 @@ func (s *svc) SetCookie(ctx *gin.Context, key, content string) {
 	ctx.SetCookie(key, content, -1, "/", "", s.CookieSecure, true)
 }
 
+func (s *svc) ParseJwt(token, secret string) (int64, error) {
+	t, err := jwt.ParseWithClaims(token, &TokenClaims{}, func(token *jwt.Token) (i interface{}, err error) {
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return 0, gin.NewParameterError("invalid token", http.StatusUnauthorized) //无效token
+	}
+
+	tokenInfo := t.Claims.(*TokenClaims)
+	if tokenInfo.ExpiresAt < time.Now().UnixMilli() {
+		return 0, gin.NewParameterError("expired token", http.StatusUnauthorized) //token过期
+	}
+
+	return tokenInfo.UserId, nil
+}
+
 func (s *svc) ParseJwtInfo(ctx *gin.Context) (userId int64, err gone.Error) {
 	jwtToken := utils.CtxGetString(ctx, entity.JwtKey)
 	if jwtToken == "" {
