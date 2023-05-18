@@ -12,7 +12,7 @@ const IdAdminRouter = "router-admin"
 
 //go:gone
 func NewAdmin() (gone.Goner, gone.GonerId) {
-	return &authRouter{}, IdAuthRouter
+	return &authRouter{}, IdAdminRouter
 }
 
 type adminRouter struct {
