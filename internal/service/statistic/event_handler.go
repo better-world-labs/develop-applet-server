@@ -75,7 +75,7 @@ func (e *EventHandler) handleAppRecommendChanged(evt *entity.MiniAppRecommendCha
 		return e.miniApp.IncrementAppRecommendTimes(evt.AppId)
 	}
 
-	return e.miniApp.IncrementAppRuntimes(evt.AppId)
+	return e.miniApp.DecrementAppRecommendTimes(evt.AppId)
 }
 
 func (e *EventHandler) handleAppOutputLikeChanged(evt *entity.MiniAppOutputLikeChangedEvent) error {
