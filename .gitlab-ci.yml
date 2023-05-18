@@ -17,7 +17,7 @@ before_script:
   - ENV=$CI_COMMIT_REF_NAME
   - DOMAIN=moyu.$ENV.openviewtech.com #域名和环境相关
   - AI_DOMAIN=ai.moyu.$ENV.openviewtech.com #域名和环境相关
-  - ADMIN_DOMAIN=star-$ENV.openviewtech.com #域名和环境相关
+  - ADMIN_DOMAIN=$ENV-star.openviewtech.com #域名和环境相关
   - POD_COUNT=1 #开发环境、测试环境，只保留一个节点
   - if [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then
   - ENV="prod"
