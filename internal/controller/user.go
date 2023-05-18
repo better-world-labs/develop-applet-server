@@ -47,7 +47,7 @@ func (ctr *userController) Mount() gin.MountError {
 		PUT("/me/work-off-time", ctr.updateWorkOffTime).
 		PUT("/me/boss-key", ctr.updateBossKey).
 		GET("/off-time-earlier", ctr.calculateEarlierThan).
-		GET("/:id/statistic", ctr.userStatistic).
+		GET("/:userId/statistic", ctr.userStatistic).
 		POST("/me/browse-duration", ctr.updateBrowseDuration).
 		GET("/moyu-detail", ctr.getMoyuDetail).
 		PUT("/me/work-settings", ctr.updateWorkSettings).
@@ -282,7 +282,7 @@ func (ctr *userController) postEvent(ctx *gin.Context) (any, error) {
 }
 
 func (ctr *userController) userStatistic(ctx *gin.Context) (any, error) {
-	userId, err := utils.CtxPathParamInt64(ctx, "id")
+	userId, err := utils.CtxPathParamInt64(ctx, "userId")
 	if err != nil {
 		return nil, gin.NewParameterError(err.Error())
 	}
