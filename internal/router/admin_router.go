@@ -22,10 +22,11 @@ type adminRouter struct {
 	root          gin.IRouter `gone:"gone-gin-router"`
 
 	Auth   *middleware.AdminMiddleware `gone:"*"`
+	Cors   *middleware.CorsMiddleware  `gone:"*"`
 	tracer tracer.Tracer               `gone:"gone-tracer"`
 }
 
 func (r *adminRouter) AfterRevive() gone.AfterReviveError {
-	r.IRouter = r.root.Group("/admin-api", r.Auth.Next)
+	r.IRouter = r.root.Group("/admin-api", r.Cors.Next, r.Auth.Next)
 	return nil
 }
