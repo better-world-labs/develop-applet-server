@@ -77,6 +77,7 @@ type MiniAppListDto struct {
 
 	SoldPoints int64            `json:"soldPoints"`
 	Results    []*MiniAppOutput `json:"results"`
+	Top        bool             `json:"top"`
 	CreatedBy  UserSimple       `json:"createdBy"`
 }
 
@@ -141,6 +142,10 @@ func (a *MiniAppBaseInfo) IsDuplicated() bool {
 
 func (a *MiniAppBaseInfo) Cursor() int64 {
 	return a.Id
+}
+
+func (a *MiniAppBaseInfo) IsTop() bool {
+	return a.Top > 0
 }
 
 func (a *MiniAppOutput) Cursor() int64 {

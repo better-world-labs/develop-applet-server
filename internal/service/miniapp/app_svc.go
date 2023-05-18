@@ -470,6 +470,7 @@ func (a appSvc) transMiniAppToListDto(apps []*entity.MiniAppBaseInfo) ([]*entity
 		dto := &entity.MiniAppListDto{
 			MiniAppBaseInfo: *a,
 			Results:         make([]*entity.MiniAppOutput, 0, 0),
+			Top:             a.IsTop(),
 		}
 
 		if outputs, ok := outputs[a.Uuid]; ok {
