@@ -17,11 +17,13 @@ before_script:
   - ENV=$CI_COMMIT_REF_NAME
   - DOMAIN=moyu.$ENV.openviewtech.com #域名和环境相关
   - AI_DOMAIN=ai.moyu.$ENV.openviewtech.com #域名和环境相关
+  - ADMIN_DOMAIN=star-$ENV.openviewtech.com #域名和环境相关
   - POD_COUNT=1 #开发环境、测试环境，只保留一个节点
   - if [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then
   - ENV="prod"
   - DOMAIN=moyu.chat #生成环境的域名单独指定
   - AI_DOMAIN=ai.moyu.chat #生成环境的域名单独指定
+  - ADMIN_DOMAIN=star.openviewtech.com #域名和环境相关
   - POD_COUNT=4 #生产环境，保留4个节点
   - fi
   - NS="$APP_NS-$ENV"
@@ -72,6 +74,7 @@ deploy:
     - sed -i "s/__NS__/$NS/" k8s/k8s.yaml
     - sed -i "s#__HOST__#$DOMAIN#" k8s/k8s.yaml
     - sed -i "s#__AI_HOST__#$AI_DOMAIN#" k8s/k8s.yaml
+    - sed -i "s#__ADMIN_HOST__#$ADMIN_DOMAIN#" k8s/k8s.yaml
     - sed -i "s#__APP_IMAGE__#$CI_REGISTRY_IMAGE:$ENV-$VERSION#" k8s/k8s.yaml
     - sed -i "s#__APP_NAME__#$APP_NAME#" k8s/k8s.yaml
     - kubectl apply -f k8s/k8s.yaml
