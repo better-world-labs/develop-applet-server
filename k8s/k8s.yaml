@@ -60,18 +60,6 @@ spec:
             successThreshold: 1        # 健康阀值
             failureThreshold: 60       # 不健康阀值
 
-          #就绪检查
-          readinessProbe:
-            httpGet:
-              scheme: HTTP             # 协议
-              path: /api/health-check?is_ready      # 路径
-              port: 8080               # 端口
-            initialDelaySeconds: 10    # 延迟探测时间(秒)【 在k8s第一次探测前等待秒 】
-            periodSeconds: 20          # 执行探测频率(秒) 【 每隔秒执行一次 】
-            timeoutSeconds: 3          # 超时时间
-            successThreshold: 1        # 健康阀值
-            failureThreshold: 60        # 不健康阀值
-
           #存活检查
           livenessProbe:
             httpGet:
