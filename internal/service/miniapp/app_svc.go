@@ -92,8 +92,12 @@ func (a appSvc) ListApps(category int64) ([]*entity.MiniAppListDto, error) {
 	return a.transMiniAppToListDto(app)
 }
 
-func (a appSvc) TopApp(appId string) error {
-	return a.pMiniApp.markAppTop(appId)
+func (a appSvc) TopApp(appId string, top bool) error {
+	if top {
+		return a.pMiniApp.markAppTop(appId)
+	}
+
+	return a.pMiniApp.markAppUnTop(appId)
 }
 
 func (a appSvc) SortApps(appIds []string) error {

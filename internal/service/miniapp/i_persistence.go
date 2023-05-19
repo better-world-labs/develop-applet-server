@@ -41,5 +41,6 @@ type iAppPersistence interface {
 	pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutput], error)
 	pageAppsByUserId(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.MiniAppBaseInfo], error)
 	markAppTop(appId string) error
+	markAppUnTop(appId string) error
 	sortApps(appIds []string) error
 }

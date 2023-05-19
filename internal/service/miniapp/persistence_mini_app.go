@@ -174,6 +174,12 @@ func (p pMiniApp) pageAppsByUserId(query page.StreamQuery, userId int64) (*page.
 func (p pMiniApp) markAppTop(appId string) error {
 	_, err := p.Exec("update mini_app set top = 1 where uuid = ? and top = 0", appId)
 	return err
+
+}
+
+func (p pMiniApp) markAppUnTop(appId string) error {
+	_, err := p.Exec("update mini_app set top = 0 where uuid = ? and top > 0", appId)
+	return err
 }
 
 func (p pMiniApp) sortApps(appIds []string) error {

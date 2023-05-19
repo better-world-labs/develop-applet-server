@@ -1905,12 +1905,16 @@ X-Request-ID: {id}
     };
     ```
 
-#### 1.9.5 后台管理小程序置顶
+#### 1.9.5 后台管理小程序置顶/取消置顶
 
 - 请求
  
     ```http
-    PUT /admin-api/apps/:uuid/top HTTP/1.1
+    PUT /admin-api/apps/:appId/top HTTP/1.1
+  
+    {
+        "top": false
+    }
     ```
   
 - 应答

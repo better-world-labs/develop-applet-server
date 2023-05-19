@@ -497,5 +497,13 @@ func (con *miniAppController) topSorting(ctx *gin.Context) (any, error) {
 func (con *miniAppController) topApp(ctx *gin.Context) (any, error) {
 	appId := ctx.Param("uuid")
 
-	return nil, con.svc.TopApp(appId)
+	var param struct {
+		Top bool `json:"top"`
+	}
+
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	return nil, con.svc.TopApp(appId, param.Top)
 }

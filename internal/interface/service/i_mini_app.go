@@ -22,7 +22,7 @@ type (
 		// ListApps category=0 则不筛选
 		ListApps(category int64) ([]*entity.MiniAppListDto, error)
 
-		TopApp(appId string) error
+		TopApp(appId string, top bool) error
 
 		SortApps(appIds []string) error
 
