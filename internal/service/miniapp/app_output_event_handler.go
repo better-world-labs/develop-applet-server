@@ -34,24 +34,37 @@ func (e *AppOutputEventHandler) handleAppRunDone(evt *entity.AppRunDoneEvent) er
 		return err
 	}
 
-	if !has {
-		if err := e.appSvc.CreateOutput(&entity.MiniAppOutput{
-			InputArgs:         evt.Param.Values,
-			AppId:             evt.AppId,
-			Open:              evt.Param.Open,
-			CreatedAt:         time.Now(),
-			CreatedBy:         evt.User,
-			MiniAppOutputCore: evt.Output,
-		}); err != nil {
-			return err
-		}
-
-		return e.Sender.Send(entity.AppOutputCreatedEvent{
-			OutputId: evt.Output.OutputId,
-			UserId:   evt.User,
-			AppId:    evt.AppId,
-		})
+	if has {
+		return nil
 	}
+
+	app, has, err := e.appSvc.GetAppByUuid(evt.AppId)
+	if err != nil {
+		return err
+	}
+
+	if !has {
+		e.Errorf("app %s found ", evt.AppId)
+		return nil
+	}
+
+	if err := e.appSvc.CreateOutput(&entity.MiniAppOutput{
+		InputArgs:         evt.Param.Values,
+		InputForm:         *app.Form,
+		AppId:             evt.AppId,
+		Open:              evt.Param.Open,
+		CreatedAt:         time.Now(),
+		CreatedBy:         evt.User,
+		MiniAppOutputCore: evt.Output,
+	}); err != nil {
+		return err
+	}
+
+	return e.Sender.Send(entity.AppOutputCreatedEvent{
+		OutputId: evt.Output.OutputId,
+		UserId:   evt.User,
+		AppId:    evt.AppId,
+	})
 
 	return nil
 }

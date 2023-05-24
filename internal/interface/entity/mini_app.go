@@ -98,12 +98,13 @@ type (
 	MiniAppOutput struct {
 		MiniAppOutputCore `xorm:"extends"`
 
-		Id        int64     `json:"-"`
-		InputArgs []string  `json:"inputArgs"`
-		Open      bool      `json:"-"`
-		AppId     string    `json:"appId"`
-		CreatedAt time.Time `json:"createdAt"`
-		CreatedBy int64     `json:"-"`
+		Id        int64             `json:"-"`
+		InputArgs []string          `json:"inputArgs"`
+		InputForm MiniAppFormFields `json:"inputForm"`
+		Open      bool              `json:"-"`
+		AppId     string            `json:"appId"`
+		CreatedAt time.Time         `json:"createdAt"`
+		CreatedBy int64             `json:"-"`
 	}
 
 	MiniAppOutputDto struct {

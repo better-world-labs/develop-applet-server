@@ -819,6 +819,25 @@ X-Request-ID: {id}
           "id": "1", 
           "type": "text",
           "inputArgs":["xxx","xxx"],
+          "inputForm":[
+            {
+              "id": "uuid",
+              "label": "姓名",
+              "type": "text",
+              "properties": {
+                "placeholder": "xxx"
+              }
+            },
+            {
+              "id": "uuid",
+              "label": "性别",
+              "type": "select",
+              "properties": {
+                "placeholder": "xxx",
+                "values": "男\n女",
+              }
+            }
+          ],
           "content": "哈哈哈",
           "likeTimes": 12, //点赞数
           "hateTimes": 12, //踩数
@@ -859,6 +878,25 @@ X-Request-ID: {id}
       "id": "1", 
       "type": "text",
       "inputArgs":["xxx","xxx"],
+      "inputForm":[
+        {
+          "id": "uuid",
+          "label": "姓名",
+          "type": "text",
+          "properties": {
+            "placeholder": "xxx"
+          }
+        },
+        {
+          "id": "uuid",
+          "label": "性别",
+          "type": "select",
+          "properties": {
+            "placeholder": "xxx",
+            "values": "男\n女",
+          }
+        }
+      ],
       "content": "哈哈哈",
       "likeTimes": 12, //点赞数
       "hateTimes": 12, //踩数
