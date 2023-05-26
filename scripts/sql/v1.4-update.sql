@@ -28,10 +28,10 @@ alter table statistic_mini_app
 alter table statistic_mini_app
     add recommend_times_updated_at datetime default now() not null;
 
+# 新的
 alter table mini_app_output
     add input_form json null;
 
-# 新的
 update mini_app_output o, mini_app a set o.input_form=a.form where o.app_id = a.uuid;
 
 alter table mini_app_output
