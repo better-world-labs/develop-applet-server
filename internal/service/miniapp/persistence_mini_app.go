@@ -194,7 +194,7 @@ func (p pMiniApp) sortApps(appIds []string) error {
 		}
 
 		for sort, i := range appIds {
-			_, err := p.Exec("update mini_app set top = ? where uuid = ? and top > 0", sort+1, i)
+			_, err := p.Exec("update mini_app set top = ? where uuid = ? and top > 0", len(appIds)-sort, i)
 			if err != nil {
 				return err
 			}
