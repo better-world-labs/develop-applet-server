@@ -24,7 +24,7 @@ type MiniAppBaseInfo struct {
 	Uuid          string        `json:"uuid"`
 	DuplicateFrom string        `json:"duplicateFrom"`
 	Name          string        `json:"name" binding:"required"`
-	Description   string        `json:"description" binding:"required"`
+	Description   string        `json:"description"`
 	Category      int64         `json:"category" binding:"required"`
 	Price         int           `xorm:"-" json:"price"`
 	CreatedBy     int64         `json:"-"`
