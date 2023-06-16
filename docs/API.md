@@ -254,6 +254,43 @@ v0.2: 将字段 `nickname`、`avatar` 两个字段调整为非必填；在首次
     }
     ```
 
+#### 1.1.4 根据授权码登录
+
+- 请求
+    ```http
+    POST /api/users/login-mobile HTTP/1.1
+    Content-Type: application/json;charset=utf8
+    
+    {
+        code: `${code}`,
+        invitedBy: 1, //邀请用户,若存在则携带，非必填
+        formApp: "xxx" // ['mini-app', 'moyu']
+    }
+    ```
+- 应答
+
+    ```js
+    // SET-Cookie: token=xxxx
+    httpStatus = 200;
+    httpRes = {
+        code: 0,
+        data: {
+            csrfToken: "xxxxx", //csrf Token
+            user: {
+                id: 110001,
+                nickname: "大熊",
+                avatar: "https://xx.com/image/xx.png",
+            },
+        }
+    }
+    ```
+- 或者
+    ```js
+    httpStatus = 200;
+    httpRes = {
+        code: 401001  //用户未授权
+    }
+    ```
 #### 1.1.5 测试登录接口 【仅用于测试】
 
 - 请求
