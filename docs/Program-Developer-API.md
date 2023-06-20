@@ -2056,6 +2056,33 @@ X-Request-ID: {id}
   };
   ```
 
+#### 1.9.8 JS-SDK 签名
+
+按照热度排序
+
+- 请求
+
+  ```http
+  POST /api/wechat/js-sdk-signature HTTP/1.1
+  
+  {
+      "url": "xxx"
+  }
+  ```
+
+- 应答
+
+  ```js
+  // HTTP/1.1 200 OK
+  
+  res = {
+    "code": 0,
+    "data": {
+      
+    }
+  };
+  ```
+
 ### 1.10 服务端推送
 
 通知接收类的服务端消息推送，采用 `Websocket` 的方式实现
