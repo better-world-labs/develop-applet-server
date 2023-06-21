@@ -10,7 +10,7 @@ Cookie: {{cookie}}
 X-Csrf-Token: {{csrf}}
 
 ###
-GET {{host}}/api/system-configs?key=MINI_APP_HOME_TABS
+GET {{host}}/api/system-configs?key=MINI_APP_MOBILE_BANNER
 Cookie: {{cookie}}
 X-Csrf-Token: {{csrf}}
 

@@ -18,7 +18,9 @@ type systemController struct {
 	gone.Flag
 	logrus.Logger `gone:"gone-logger"`
 	AuthRouter    gin.IRouter     `gone:"router-auth"`
+	PubRouter     gin.IRouter     `gone:"router-pub"`
 	System        service.ISystem `gone:"*"`
+	Jssdk         service.IJSSDK  `gone:"*"`
 }
 
 func (ctr *systemController) Mount() gin.MountError {
@@ -26,6 +28,10 @@ func (ctr *systemController) Mount() gin.MountError {
 		Group("/system").
 		GET("/oss-token", ctr.genOssToken).
 		GET("/emoticons", ctr.getEmoticonList)
+
+	ctr.PubRouter.
+		Group("/system").
+		POST("/js-sdk-signature", ctr.getJSSignature)
 
 	return nil
 }
@@ -47,4 +53,16 @@ func (ctr *systemController) getEmoticonList(ctx *gin.Context) (data any, err er
 		}
 	}
 	return utils.List(ctr.System.GetEmoticonList(int(groupId), sort != "none"))
+}
+
+func (ctr *systemController) getJSSignature(ctx *gin.Context) (any, error) {
+	var param struct {
+		Url string `json:"url" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	return ctr.Jssdk.GetSignature(param.Url)
 }

@@ -2063,7 +2063,7 @@ X-Request-ID: {id}
 - 请求
 
   ```http
-  POST /api/wechat/js-sdk-signature HTTP/1.1
+  POST /api/system/js-sdk-signature HTTP/1.1
   
   {
       "url": "xxx"
