@@ -196,6 +196,22 @@ func (s *svc) GetQrTokenParams(qrToken string, redirectUrl string) (tokenExpired
 	return
 }
 
+func (s *svc) LoginMobile(code string, invitedBy *int64, fromApp, source string) (userSimple *entity.UserSimple, err error) {
+	userInfo, err := s.parseWxCode(code)
+	if err != nil {
+		return nil, err
+	}
+
+	userSimple, err = s.findOrCreate(userInfo)
+	if err != nil {
+		return
+	}
+
+	loginToken := token.GenOfflineToken(time.Now().Add(s.QrTokenExpiresIn), s.LoginTokenSecret, userSimple.Id)
+	userSimple, err = s.SetUserWithLoginToken(loginToken, userSimple.Nickname, userSimple.Avatar, invitedBy, fromApp, source)
+	return
+}
+
 func (s *svc) AuthByCode(qrToken, code string) (userSimple *entity.UserSimple, err error) {
 	_, e := token.DecodeOfflineToken(qrToken, s.LoginTokenSecret)
 	if e != nil {

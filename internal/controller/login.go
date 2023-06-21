@@ -30,6 +30,7 @@ func (ctr *loginController) Mount() gin.MountError {
 	group := ctr.PubRouter.Group("/users/login")
 	ctr.AuthRouter.Group("/users/logout").POST("", ctr.logout)
 
+	ctr.PubRouter.POST("/users/login-mobile", ctr.loginMobile)
 	group.
 		POST("", ctr.loginByToken).
 		GET("/qr", ctr.getQrToken).
@@ -142,4 +143,23 @@ func (ctr *loginController) logout(ctx *gin.Context) (interface{}, error) {
 	userId := utils.CtxMustGetUserId(ctx)
 	clientId := utils.CtxGetString(ctx, entity.ClientIdKey)
 	return nil, ctr.User.Logout(ctx, userId, clientId)
+}
+
+func (ctr *loginController) loginMobile(ctx *gin.Context) (any, error) {
+	var param struct {
+		InvitedBy *int64 `json:"invitedBy"`
+		FromApp   string `json:"fromApp"`
+		Source    string `json:"source"`
+		Code      string `json:"code"  binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
+	}
+
+	user, err := ctr.User.LoginMobile(param.Code, param.InvitedBy, param.FromApp, param.Source)
+	if err != nil {
+		return nil, err
+	}
+	return ctr.User.Login(ctx, user)
 }

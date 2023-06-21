@@ -21,6 +21,7 @@ type IUser interface {
 
 	ParseJwt(token, secret string) (int64, error)
 
+	LoginMobile(code string, invitedBy *int64, fromApp, source string) (userSimple *entity.UserSimple, err error)
 	//Login 用户登录
 	Login(ctx *gin.Context, user *entity.UserSimple) (rst *entity.LoginRst, err error)
 
