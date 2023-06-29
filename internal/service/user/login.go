@@ -182,6 +182,17 @@ func (s *svc) GenQrToken() (*entity.QrTokenWarp, error) {
 }
 
 func (s *svc) GetQrTokenParams(qrToken string, redirectUrl string) (tokenExpired time.Time, authUrl string, err error) {
+	if qrToken == "" {
+		authUrl = fmt.Sprintf(
+			"https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&"+
+				"scope=snsapi_userinfo&forcePopup=true&forceSnapShot=true#wechat_redirect",
+			s.WxAppId,
+			redirectUrl,
+		)
+
+		return
+	}
+
 	tokenExpired, err = token.DecodeOfflineToken(qrToken, s.LoginTokenSecret)
 	if err != nil {
 		err = gin.NewParameterError(err.Error())
