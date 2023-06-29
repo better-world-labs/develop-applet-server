@@ -85,7 +85,7 @@ func (ctr *loginController) loginByToken(context *gin.Context) (interface{}, err
 
 func (ctr *loginController) getAuthParams(context *gin.Context) (interface{}, error) {
 	type Req struct {
-		QrToken     string `form:"qrToken"  binding:"required"`
+		QrToken     string `form:"qrToken"`
 		RedirectUrl string `form:"redirectUrl"  binding:"required"`
 	}
 
