@@ -8,6 +8,7 @@ import (
 	"github.com/gone-io/gone/goner/logrus"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/utils"
 	"io"
 	"net/http"
@@ -22,7 +23,7 @@ type gptChat struct {
 	*Base `gone:"*"`
 
 	logrus.Logger `gone:"gone-logger"`
-	AuthRouter    gin.IRouter      `gone:"router-auth"`
+	AuthRouter    gin.IRouter      `gone:"router-pub"`
 	svc           service.IGPTChat `gone:"*"`
 }
 
@@ -35,7 +36,14 @@ func (con *gptChat) Mount() gin.MountError {
 
 func (con *gptChat) listGptChatMessages(ctx *gin.Context) (any, error) {
 	userId := utils.CtxMustGetUserId(ctx)
-	apps, err := con.svc.ListMessages(userId)
+
+	var query page.StreamQuery
+	err := query.BindQuery(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	apps, err := con.svc.ListMessages(query, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +67,8 @@ func (con *gptChat) sendGptMessage(ctx *gin.Context) (any, error) {
 		return nil, nil
 	}
 
-	userId := utils.CtxMustGetUserId(ctx)
+	//userId := utils.CtxMustGetUserId(ctx)
+	userId := 10
 	var param struct {
 		Content string `json:"content" binding:"required"`
 	}
@@ -75,7 +84,7 @@ func (con *gptChat) sendGptMessage(ctx *gin.Context) (any, error) {
 		return nil, nil
 	}
 
-	reader, err := con.svc.SendMessage(userId, param.Content)
+	reader, err := con.svc.SendMessage(int64(userId), param.Content)
 	if err != nil {
 		if goneErr, ok := err.(gone.Error); ok {
 			done.Code = goneErr.Code()
