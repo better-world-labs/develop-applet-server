@@ -36,6 +36,7 @@ func (q StreamQuery) Size() int {
 func (q *StreamQuery) BindQuery(ctx *gin.Context) error {
 	var s struct {
 		Cursor string `form:"cursor"`
+		Size   int    `form:"size"`
 	}
 
 	err := ctx.ShouldBindQuery(&s)
@@ -43,7 +44,10 @@ func (q *StreamQuery) BindQuery(ctx *gin.Context) error {
 		return nil
 	}
 
-	*q = CreateStreamQuery(DefaultStreamSize, s.Cursor)
+	if s.Size == 0 {
+		s.Size = DefaultStreamSize
+	}
+	*q = CreateStreamQuery(s.Size, s.Cursor)
 	return nil
 }
 

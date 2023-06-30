@@ -795,15 +795,16 @@ X-Request-ID: {id}
 - 请求
 
   ```http
-  GET /api/apps/:uuid/outputs?cursor=xxx HTTP/1.1
+  GET /api/apps/:uuid/outputs?size=xxxcursor=xxx HTTP/1.1
   ```
 
 - 其中
 
-  | 字段   | 说明   |
+  | 字段     | 说明   |
   |------| --- |
-  | uuid | 应用ID |
-  | cursor    | 分页游标 |
+  | uuid   | 应用ID |
+  | cursor | 分页游标 |
+  | size      | 分页大小，选填|
 
 - 应答
 
