@@ -67,8 +67,7 @@ func (con *gptConversation) sendGptMessage(ctx *gin.Context) (any, error) {
 		return nil, nil
 	}
 
-	//userId := utils.CtxMustGetUserId(ctx)
-	userId := 10
+	userId := utils.CtxMustGetUserId(ctx)
 	var param struct {
 		Content string `json:"content" binding:"required"`
 	}

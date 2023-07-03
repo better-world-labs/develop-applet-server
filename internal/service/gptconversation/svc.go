@@ -19,9 +19,9 @@ type svc struct {
 	gone.Goner
 	xorm.Engine `gone:"gone-xorm"`
 
-	points service.IPointStrategy
-	p      iPersistence       `gone:"*"`
-	gpt    gpt.ICompletionGpt `gone:"*"`
+	points service.IPointStrategy `gone:"*"`
+	p      iPersistence           `gone:"*"`
+	gpt    gpt.ICompletionGpt     `gone:"*"`
 }
 
 //go:gone
