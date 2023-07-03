@@ -23,14 +23,14 @@ type gptConversation struct {
 	*Base `gone:"*"`
 
 	logrus.Logger `gone:"gone-logger"`
-	AuthRouter    gin.IRouter              `gone:"router-pub"`
+	AuthRouter    gin.IRouter              `gone:"router-auth"`
 	svc           service.IGPTConversation `gone:"*"`
 }
 
 func (con *gptConversation) Mount() gin.MountError {
 	con.AuthRouter.
 		GET("/gpt-conversations", con.listGptChatMessages).
-		POST("gpt-messages", con.sendGptMessage)
+		POST("/gpt-messages", con.sendGptMessage)
 	return nil
 }
 
