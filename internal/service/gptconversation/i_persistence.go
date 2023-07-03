@@ -1,4 +1,4 @@
-package gptcaht
+package gptconversation
 
 import (
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"

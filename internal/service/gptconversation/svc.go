@@ -1,6 +1,7 @@
-package gptcaht
+package gptconversation
 
 import (
+	"bytes"
 	"github.com/ahmetb/go-linq/v3"
 	"github.com/gone-io/gone"
 	"github.com/gone-io/gone/goner/xorm"
@@ -18,8 +19,9 @@ type svc struct {
 	gone.Goner
 	xorm.Engine `gone:"gone-xorm"`
 
-	p   iPersistence       `gone:"*"`
-	gpt gpt.ICompletionGpt `gone:"*"`
+	points service.IPointStrategy
+	p      iPersistence       `gone:"*"`
+	gpt    gpt.ICompletionGpt `gone:"*"`
 }
 
 //go:gone
@@ -59,7 +61,14 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 		CreatedAt: time.Now(),
 	}
 
-	if err := s.p.create(&message); err != nil {
+	if err := s.Transaction(func(session xorm.Interface) error {
+		if err := s.p.create(&message); err != nil {
+			return err
+		}
+
+		_, err := s.points.ApplyPoints(userId, entity.StrategyArgGptConversation{})
+		return err
+	}); err != nil {
 		return nil, err
 	}
 
@@ -83,6 +92,8 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 	ch := make(chan entity.GptChatMessage)
 	reader := service.NewChannelStreamTrunkReader(ch)
 	go func() {
+		var replyContent = bytes.Buffer{}
+
 		for {
 			r, err := stream.Read()
 			if err != nil {
@@ -94,11 +105,21 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 				break
 			}
 
-			ch <- entity.GptChatMessage{
+			replyChunk := entity.GptChatMessage{
 				Role:    entity.GPTRoleAssistant,
 				UserId:  userId,
 				Content: r.Choices[0].Delta.Content,
 			}
+			ch <- replyChunk
+			replyContent.WriteString(replyChunk.Content)
+		}
+
+		if err := s.p.create(&entity.GptChatMessage{
+			Role:    entity.GPTRoleAssistant,
+			UserId:  userId,
+			Content: replyContent.String(),
+		}); err != nil {
+			//TODO
 		}
 	}()
 

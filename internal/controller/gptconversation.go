@@ -16,25 +16,25 @@ import (
 
 //go:gone
 func NewGPTChatController() gone.Goner {
-	return &gptChat{}
+	return &gptConversation{}
 }
 
-type gptChat struct {
+type gptConversation struct {
 	*Base `gone:"*"`
 
 	logrus.Logger `gone:"gone-logger"`
-	AuthRouter    gin.IRouter      `gone:"router-pub"`
-	svc           service.IGPTChat `gone:"*"`
+	AuthRouter    gin.IRouter              `gone:"router-pub"`
+	svc           service.IGPTConversation `gone:"*"`
 }
 
-func (con *gptChat) Mount() gin.MountError {
+func (con *gptConversation) Mount() gin.MountError {
 	con.AuthRouter.
 		GET("/gpt-conversations", con.listGptChatMessages).
 		POST("gpt-messages", con.sendGptMessage)
 	return nil
 }
 
-func (con *gptChat) listGptChatMessages(ctx *gin.Context) (any, error) {
+func (con *gptConversation) listGptChatMessages(ctx *gin.Context) (any, error) {
 	userId := utils.CtxMustGetUserId(ctx)
 
 	var query page.StreamQuery
@@ -51,7 +51,7 @@ func (con *gptChat) listGptChatMessages(ctx *gin.Context) (any, error) {
 	return entity.ListWrap{List: apps}, nil
 }
 
-func (con *gptChat) sendGptMessage(ctx *gin.Context) (any, error) {
+func (con *gptConversation) sendGptMessage(ctx *gin.Context) (any, error) {
 	ctx.Writer.Header().Set("Content-Type", "text/event-stream; charset=utf-8")
 	ctx.Writer.Header().Set("Cache-Control", "no-cache")
 	ctx.Writer.Header().Set("Connection", "keep-alive")

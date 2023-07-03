@@ -86,3 +86,11 @@ type StrategyArgAppUsed struct {
 func (s StrategyArgAppUsed) Type() string {
 	return PointsTypeAppUsed
 }
+
+// StrategyArgGptConversation GPT 对话
+type StrategyArgGptConversation struct {
+}
+
+func (s StrategyArgGptConversation) Type() string {
+	return PointsTypeGptConversation
+}

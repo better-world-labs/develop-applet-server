@@ -51,6 +51,12 @@ var definition = map[string]entity.PointsDefinition{
 		Description: "创建程序",
 		Points:      +5,
 	},
+
+	entity.PointsTypeGptConversation: {
+		Type:        entity.PointsTypeGptConversation,
+		Description: "GPT 对话",
+		Points:      -5,
+	},
 }
 
 func getDefinition(_type string) (entity.PointsDefinition, bool) {

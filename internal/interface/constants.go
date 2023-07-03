@@ -12,6 +12,7 @@ const (
 	PointsStrategyUsingAppMinCost = 5
 	PointsStrategyCreateAppEarn   = 5
 	PointsStrategyFirstLogin      = 30
+	PointsStrategyGptConversation = 5
 )
 
 // 风控限制

@@ -6,16 +6,17 @@ import (
 )
 
 const (
-	PointsTypeNewRegister    = "new-register"
-	PointsTypeSignIn         = "sign-in"
-	PointsTypeInvite         = "invite"
-	PointsTypeBeInvited      = "be-invited"
-	PointsTypeUsingApp       = "using-app"
-	PointsTypeAppUsed        = "app-used"
-	PointsTypeAppCreated     = "app-created"
-	PointsTypeDuplicatingApp = "duplicating-app"
-	PointsTypeAppDuplicated  = "app-duplicated"
-	PointsTypePointsRecharge = "points-recharge"
+	PointsTypeNewRegister     = "new-register"
+	PointsTypeSignIn          = "sign-in"
+	PointsTypeInvite          = "invite"
+	PointsTypeBeInvited       = "be-invited"
+	PointsTypeUsingApp        = "using-app"
+	PointsTypeAppUsed         = "app-used"
+	PointsTypeAppCreated      = "app-created"
+	PointsTypeGptConversation = "apt-conversation"
+	PointsTypeDuplicatingApp  = "duplicating-app"
+	PointsTypeAppDuplicated   = "app-duplicated"
+	PointsTypePointsRecharge  = "points-recharge"
 )
 
 type PointsDefinition struct {

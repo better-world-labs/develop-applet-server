@@ -1,4 +1,4 @@
-package gptcaht
+package gptconversation
 
 import (
 	"github.com/gone-io/gone"
