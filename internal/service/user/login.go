@@ -27,10 +27,11 @@ func (s *svc) SetCookie(ctx *gin.Context, key, content string) {
 	} else {
 		maxAge = int(s.CookieExpiresIn.Seconds())
 	}
-	ctx.SetCookie(key, content, maxAge, "/", s.mainDomain, s.CookieSecure, true)
-
-	//清理子域名cookie
-	ctx.SetCookie(key, content, -1, "/", "", s.CookieSecure, true)
+	var domain string
+	if ctx.Request.Host == s.mainDomain {
+		domain = s.mainDomain
+	}
+	ctx.SetCookie(key, content, maxAge, "/", domain, s.CookieSecure, true)
 }
 
 func (s *svc) ParseJwt(token, secret string) (int64, error) {
