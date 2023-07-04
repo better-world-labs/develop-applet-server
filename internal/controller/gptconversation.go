@@ -24,13 +24,16 @@ type gptConversation struct {
 
 	logrus.Logger `gone:"gone-logger"`
 	AuthRouter    gin.IRouter              `gone:"router-auth"`
+	PubRouter     gin.IRouter              `gone:"router-pub"`
 	svc           service.IGPTConversation `gone:"*"`
 }
 
 func (con *gptConversation) Mount() gin.MountError {
 	con.AuthRouter.
 		GET("/gpt-conversations", con.listGptChatMessages).
-		POST("/gpt-messages", con.sendGptMessage).
+		POST("/gpt-messages", con.sendGptMessage)
+
+	con.PubRouter.
 		POST("/gpt-messages/:messageId/like", con.likeMessage)
 	return nil
 }
@@ -139,6 +142,10 @@ func (con *gptConversation) likeMessage(ctx *gin.Context) (any, error) {
 
 	var param struct {
 		LikeState entity.LikeState `json:"likeState"`
+	}
+
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		return nil, gin.NewParameterError(err.Error())
 	}
 
 	return nil, con.svc.LikeMessage(messageId, param.LikeState)
