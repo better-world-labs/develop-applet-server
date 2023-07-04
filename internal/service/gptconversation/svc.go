@@ -116,9 +116,10 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 		}
 
 		if err := s.p.create(&entity.GptChatMessage{
-			Role:    entity.GPTRoleAssistant,
-			UserId:  userId,
-			Content: replyContent.String(),
+			Role:      entity.GPTRoleAssistant,
+			UserId:    userId,
+			Content:   replyContent.String(),
+			CreatedAt: time.Now(),
 		}); err != nil {
 			//TODO
 		}
