@@ -141,7 +141,22 @@ func (s svc) ListMessages(query page.StreamQuery, userId int64) (*page.StreamRes
 		}
 	}
 
-	return s.p.pageByUserId(query, userId)
+	return s.ascPageByUserId(query, userId)
+}
+
+func (s svc) ascPageByUserId(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.GptChatMessage], error) {
+	result, err := s.p.pageByUserId(query, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	var ascResult []*entity.GptChatMessage
+
+	linq.From(result.GetList()).OrderBy(func(message interface{}) interface{} {
+		return message.(*entity.GptChatMessage).Id
+	}).ToSlice(&ascResult)
+
+	return page.NewAscStreamResult(ascResult), nil
 }
 
 func (s svc) initGreetMessage(userId int64) error {

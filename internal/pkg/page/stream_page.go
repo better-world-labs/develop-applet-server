@@ -56,6 +56,17 @@ type StreamResult[T StreamCursor] struct {
 	list       []T
 }
 
+func NewAscStreamResult[T StreamCursor](data []T) *StreamResult[T] {
+	if data == nil {
+		data = make([]T, 0, 0)
+	}
+
+	return &StreamResult[T]{
+		list:       data,
+		nextCursor: getHeadCursor(DefaultStreamSize, data),
+	}
+}
+
 func NewStreamResult[T StreamCursor](data []T) *StreamResult[T] {
 	if data == nil {
 		data = make([]T, 0, 0)
@@ -65,6 +76,14 @@ func NewStreamResult[T StreamCursor](data []T) *StreamResult[T] {
 		list:       data,
 		nextCursor: getCursor(DefaultStreamSize, data),
 	}
+}
+
+func getHeadCursor[T StreamCursor](size int, data []T) string {
+	if len(data) < size {
+		return ""
+	}
+
+	return wrapCursor(data[0].Cursor())
 }
 
 func getCursor[T StreamCursor](size int, data []T) string {
