@@ -32,6 +32,7 @@ create table gpt_chat_message
     id         bigint auto_increment
         primary key,
     role       varchar(20)   not null comment '角色: user: 用户, assistant: gpt',
+    message_id       varchar(64)   not null unique comment '唯一标识',
     user_id     bigint        not null comment '用户ID',
     content    varchar(4096) not null default '' comment '消息内容',
     created_at datetime      not null default now(),

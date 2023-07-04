@@ -17,6 +17,13 @@ func NewPersistence() gone.Goner {
 	return &persistence{}
 }
 
+func (p *persistence) updateLikeState(messageId string, likeState entity.LikeState) error {
+	return p.Transaction(func(session xorm.Interface) error {
+		_, err := session.Exec("update gpt_chat_message set is_like = ? where message_id = ?", likeState, messageId)
+		return err
+	})
+}
+
 func (p *persistence) create(message *entity.GptChatMessage) error {
 	return p.Transaction(func(session xorm.Interface) error {
 		_, err := session.Insert(message)

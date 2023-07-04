@@ -6,6 +6,7 @@ import (
 	"github.com/gone-io/gone"
 	"github.com/gone-io/gone/goner/gin"
 	"github.com/gone-io/gone/goner/logrus"
+	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/utils"
@@ -29,7 +30,8 @@ type gptConversation struct {
 func (con *gptConversation) Mount() gin.MountError {
 	con.AuthRouter.
 		GET("/gpt-conversations", con.listGptChatMessages).
-		POST("/gpt-messages", con.sendGptMessage)
+		POST("/gpt-messages", con.sendGptMessage).
+		POST("/gpt-messages/:messageId/like", con.likeMessage)
 	return nil
 }
 
@@ -82,7 +84,7 @@ func (con *gptConversation) sendGptMessage(ctx *gin.Context) (any, error) {
 		return nil, nil
 	}
 
-	reader, err := con.svc.SendMessage(int64(userId), param.Content)
+	reader, err := con.svc.SendMessage(userId, param.Content)
 	if err != nil {
 		if goneErr, ok := err.(gone.Error); ok {
 			done.Code = goneErr.Code()
@@ -130,4 +132,14 @@ func (con *gptConversation) sendGptMessage(ctx *gin.Context) (any, error) {
 	reader.Close()
 
 	return nil, nil
+}
+
+func (con *gptConversation) likeMessage(ctx *gin.Context) (any, error) {
+	messageId := ctx.Param("messageId")
+
+	var param struct {
+		LikeState entity.LikeState `json:"likeState"`
+	}
+
+	return nil, con.svc.LikeMessage(messageId, param.LikeState)
 }

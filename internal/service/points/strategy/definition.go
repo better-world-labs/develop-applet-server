@@ -55,7 +55,7 @@ var definition = map[string]entity.PointsDefinition{
 	entity.PointsTypeGptConversation: {
 		Type:        entity.PointsTypeGptConversation,
 		Description: "GPT 对话",
-		Points:      -5,
+		Points:      -3,
 	},
 }
 

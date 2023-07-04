@@ -5,6 +5,7 @@ import (
 	"github.com/ahmetb/go-linq/v3"
 	"github.com/gone-io/gone"
 	"github.com/gone-io/gone/goner/xorm"
+	"github.com/google/uuid"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
@@ -54,8 +55,13 @@ func (s svc) createContext(message entity.GptChatMessage) ([]gpt.ChatCompletionM
 	return res, nil
 }
 
+func (s svc) LikeMessage(messageId string, likeState entity.LikeState) error {
+	return s.p.updateLikeState(messageId, likeState)
+}
+
 func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTrunkReader[entity.GptChatMessage], error) {
 	message := entity.GptChatMessage{
+		MessageId: uuid.NewString(),
 		Role:      entity.GPTRoleUser,
 		Content:   content,
 		UserId:    userId,
@@ -92,6 +98,7 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 
 	ch := make(chan entity.GptChatMessage)
 	reader := service.NewChannelStreamTrunkReader(ch)
+	messageId := uuid.NewString()
 	go func() {
 		var replyContent = bytes.Buffer{}
 
@@ -107,15 +114,17 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 			}
 
 			replyChunk := entity.GptChatMessage{
-				Role:    entity.GPTRoleAssistant,
-				UserId:  userId,
-				Content: r.Choices[0].Delta.Content,
+				MessageId: messageId,
+				Role:      entity.GPTRoleAssistant,
+				UserId:    userId,
+				Content:   r.Choices[0].Delta.Content,
 			}
 			ch <- replyChunk
 			replyContent.WriteString(replyChunk.Content)
 		}
 
 		if err := s.p.create(&entity.GptChatMessage{
+			MessageId: messageId,
 			Role:      entity.GPTRoleAssistant,
 			UserId:    userId,
 			Content:   replyContent.String(),
