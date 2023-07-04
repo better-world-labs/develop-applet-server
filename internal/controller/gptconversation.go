@@ -6,7 +6,6 @@ import (
 	"github.com/gone-io/gone"
 	"github.com/gone-io/gone/goner/gin"
 	"github.com/gone-io/gone/goner/logrus"
-	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/entity"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/interface/service"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/page"
 	"gitlab.openviewtech.com/moyu-chat/moyu-server/internal/pkg/utils"
@@ -48,7 +47,7 @@ func (con *gptConversation) listGptChatMessages(ctx *gin.Context) (any, error) {
 		return nil, err
 	}
 
-	return entity.ListWrap{List: apps}, nil
+	return apps, nil
 }
 
 func (con *gptConversation) sendGptMessage(ctx *gin.Context) (any, error) {

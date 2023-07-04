@@ -38,3 +38,8 @@ func (p *persistence) pageByUserId(query page.StreamQuery, userId int64) (*page.
 
 	return page.NewStreamResult(res), nil
 }
+
+func (p *persistence) isEmptyConversation(userId int64) (bool, error) {
+	has, err := p.Where("user_id = ?", userId).Exist()
+	return !has, err
+}
