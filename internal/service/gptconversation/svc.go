@@ -156,7 +156,7 @@ func (s svc) ascPageByUserId(query page.StreamQuery, userId int64) (*page.Stream
 		return message.(*entity.GptChatMessage).Id
 	}).ToSlice(&ascResult)
 
-	return page.NewAscStreamResult(ascResult), nil
+	return page.NewAscStreamResult(query, ascResult), nil
 }
 
 func (s svc) initGreetMessage(userId int64) error {

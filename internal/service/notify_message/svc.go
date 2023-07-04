@@ -87,7 +87,7 @@ func (s svc) PageNotifyMessages(userId int64, query page.StreamQuery, filter ent
 		return nil, err
 	}
 
-	return page.NewStreamResult[*entity.NotifyMessage](slice), nil
+	return page.NewStreamResult[*entity.NotifyMessage](query, slice), nil
 }
 
 func (s svc) CountUnread(userId int64) (int64, error) {

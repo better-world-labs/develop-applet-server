@@ -56,25 +56,25 @@ type StreamResult[T StreamCursor] struct {
 	list       []T
 }
 
-func NewAscStreamResult[T StreamCursor](data []T) *StreamResult[T] {
+func NewAscStreamResult[T StreamCursor](query StreamQuery, data []T) *StreamResult[T] {
 	if data == nil {
 		data = make([]T, 0, 0)
 	}
 
 	return &StreamResult[T]{
 		list:       data,
-		nextCursor: getHeadCursor(DefaultStreamSize, data),
+		nextCursor: getHeadCursor(query.size, data),
 	}
 }
 
-func NewStreamResult[T StreamCursor](data []T) *StreamResult[T] {
+func NewStreamResult[T StreamCursor](query StreamQuery, data []T) *StreamResult[T] {
 	if data == nil {
 		data = make([]T, 0, 0)
 	}
 
 	return &StreamResult[T]{
 		list:       data,
-		nextCursor: getCursor(DefaultStreamSize, data),
+		nextCursor: getCursor(query.size, data),
 	}
 }
 

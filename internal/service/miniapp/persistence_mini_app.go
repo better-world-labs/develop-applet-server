@@ -168,7 +168,7 @@ func (p pMiniApp) pageAppsByUserId(query page.StreamQuery, userId int64) (*page.
 		return nil, err
 	}
 
-	return page.NewStreamResult(arr), nil
+	return page.NewStreamResult(query, arr), nil
 }
 
 func (p pMiniApp) markAppTop(appId string) error {
@@ -216,5 +216,5 @@ func (p pMiniApp) pageOpenedOutputsByAppId(query page.StreamQuery, uuid string) 
 		return nil, err
 	}
 
-	return page.NewStreamResult(arr), nil
+	return page.NewStreamResult(query, arr), nil
 }

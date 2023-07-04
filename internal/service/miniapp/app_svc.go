@@ -335,7 +335,7 @@ func (a appSvc) PageUsersApps(query page.StreamQuery, userId int64) (*page.Strea
 		return nil, err
 	}
 
-	return page.NewStreamResult(dtos), nil
+	return page.NewStreamResult(query, dtos), nil
 }
 
 func (a appSvc) PageOpenedAppOutputsByAppId(query page.StreamQuery, uuid string) (*page.StreamResult[*entity.MiniAppOutputDto], int64, error) {
@@ -354,7 +354,7 @@ func (a appSvc) PageOpenedAppOutputsByAppId(query page.StreamQuery, uuid string)
 		return nil, 0, err
 	}
 
-	return page.NewStreamResult(dto), count, err
+	return page.NewStreamResult(query, dto), count, err
 }
 
 func (a appSvc) ListOpenedAppOutputsByAppId(uuid string) ([]*entity.MiniAppOutputDto, error) {

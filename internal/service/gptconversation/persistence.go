@@ -36,7 +36,7 @@ func (p *persistence) pageByUserId(query page.StreamQuery, userId int64) (*page.
 		return nil, err
 	}
 
-	return page.NewStreamResult(res), nil
+	return page.NewStreamResult(query, res), nil
 }
 
 func (p *persistence) isEmptyConversation(userId int64) (bool, error) {
