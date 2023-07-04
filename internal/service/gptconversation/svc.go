@@ -58,6 +58,7 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 	message := entity.GptChatMessage{
 		Role:      entity.GPTRoleUser,
 		Content:   content,
+		UserId:    userId,
 		CreatedAt: time.Now(),
 	}
 
