@@ -45,8 +45,3 @@ func (p *persistence) pageByUserId(query page.StreamQuery, userId int64) (*page.
 
 	return page.NewStreamResult(query, res), nil
 }
-
-func (p *persistence) isEmptyConversation(userId int64) (bool, error) {
-	has, err := p.Where("user_id = ?", userId).Exist(&entity.GptChatMessage{})
-	return !has, err
-}

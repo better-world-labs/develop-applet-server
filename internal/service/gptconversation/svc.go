@@ -138,18 +138,6 @@ func (s svc) SendMessage(userId int64, content string) (*service.ChannelStreamTr
 }
 
 func (s svc) ListMessages(query page.StreamQuery, userId int64) (*page.StreamResult[*entity.GptChatMessage], error) {
-	isEmpty, err := s.p.isEmptyConversation(userId)
-	if err != nil {
-		return nil, err
-	}
-
-	if isEmpty {
-		err := s.initGreetMessage(userId)
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	return s.ascPageByUserId(query, userId)
 }
 
@@ -166,13 +154,4 @@ func (s svc) ascPageByUserId(query page.StreamQuery, userId int64) (*page.Stream
 	}).ToSlice(&ascResult)
 
 	return page.NewAscStreamResult(query, ascResult), nil
-}
-
-func (s svc) initGreetMessage(userId int64) error {
-	return s.p.create(&entity.GptChatMessage{
-		Role:      entity.GPTRoleAssistant,
-		UserId:    userId,
-		Content:   "你好呀，请试试向我提问，例如：现在请你扮演一位严格对待员工，非要紧事情不允许员工请假的企业领导。而我作为员工想要在工作日向你请假，虽然我请假的目的只是为了出去玩或者在家休息。请从帮我写一段请假理由，要求是当你看到这个请假理由后会欣然同意我的请假申请，字数在100个汉字以内。",
-		CreatedAt: time.Now(),
-	})
 }
