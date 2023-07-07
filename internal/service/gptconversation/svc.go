@@ -172,6 +172,7 @@ func (s svc) ascPageByUserId(query page.StreamQuery, userId int64) (*page.Stream
 
 func (s svc) initGreetMessage(userId int64) error {
 	return s.p.create(&entity.GptChatMessage{
+		MessageId:   uuid.NewString(),
 		Role:        entity.GPTRoleAssistant,
 		UserId:      userId,
 		IsGptIgnore: true,

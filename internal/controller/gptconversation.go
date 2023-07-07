@@ -30,24 +30,22 @@ type gptConversation struct {
 
 func (con *gptConversation) Mount() gin.MountError {
 	con.AuthRouter.
-		GET("/gpt-conversations", con.listGptChatMessages).
-		POST("/gpt-messages", con.sendGptMessage)
+		POST("/gpt-messages", con.sendGptMessage).
+		POST("/gpt-messages/:messageId/like", con.likeMessage).
+		GET("/gpt-conversations", con.listGptChatMessages)
 
-	con.PubRouter.
-		POST("/gpt-messages/:messageId/like", con.likeMessage)
 	return nil
 }
 
 func (con *gptConversation) listGptChatMessages(ctx *gin.Context) (any, error) {
 	userId := utils.CtxMustGetUserId(ctx)
-
 	var query page.StreamQuery
 	err := query.BindQuery(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	apps, err := con.svc.ListMessages(query, userId)
+	apps, err := con.svc.ListMessages(query, int64(userId))
 	if err != nil {
 		return nil, err
 	}
