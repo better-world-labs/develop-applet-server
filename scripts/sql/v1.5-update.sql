@@ -35,6 +35,7 @@ create table gpt_chat_message
     message_id       varchar(64)   not null unique comment '唯一标识',
     user_id     bigint        not null comment '用户ID',
     content    varchar(4096) not null default '' comment '消息内容',
+    is_gpt_ignore    tinyint not null default 0 comment 'GPT忽略标识',
     created_at datetime      not null default now(),
     is_like    tinyint       not null default 0 comment '点赞状态',
     INDEX (user_id)
